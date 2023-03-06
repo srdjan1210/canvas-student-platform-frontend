@@ -14,12 +14,14 @@ export const routes: RouteObject[] = [
                 element: <LoginPage />,
             },
             {
-                path: 'registration',
-                element: <RegistrationPage />,
-            },
-            {
                 path: 'dashboard',
                 element: <Dashboard />,
+                children: [
+                    {
+                        path: 'registration',
+                        element: <RegistrationPage />,
+                    },
+                ],
             },
         ],
     },

@@ -1,15 +1,62 @@
-import { Flex, Tooltip } from '@chakra-ui/react'
+import { Flex, Spacer } from '@chakra-ui/react'
+import { SideMenuItem } from './side-menu-item.component'
+import { FiLogOut } from 'react-icons/fi'
+import { IoMdCreate } from 'react-icons/io'
+import { MdOutlinePlayLesson } from 'react-icons/md'
+import { SideMenuProfileItem } from './side-menu-profile-item'
+import { useApplicationStore } from '../../store/application.store'
+import { useNavigate } from 'react-router-dom'
 
 export const SideMenu = () => {
+    const navigate = useNavigate()
+
+    const user = useApplicationStore((state) => state.user)
+    const logout = useApplicationStore((state) => state.logout)
+    console.log(user)
+    const onLogout = () => {
+        logout()
+        navigate('/login')
+    }
+
     return (
-        <Flex w={'150px'} h={'100%'}>
-            <Tooltip label={'works'}>
-                <Flex w={'50px'} h={'50px'}>
-                    Works
-                </Flex>
-            </Tooltip>
+        <Flex
+            w={'100px'}
+            h={'100%'}
+            background={'black'}
+            direction={'column'}
+            alignItems={'center'}
+            padding={'30px 0'}
+            gap={10}
+        >
+            {user?.role === 'ADMINISTRATOR' && (
+                <SideMenuItem
+                    tooltip={'Create profile'}
+                    link={'/dashboard/registration'}
+                    icon={
+                        <IoMdCreate color="white" size={40} cursor="pointer" />
+                    }
+                />
+            )}
+
+            <SideMenuItem
+                tooltip={'Courses'}
+                link={'/courses'}
+                icon={
+                    <MdOutlinePlayLesson
+                        color="white"
+                        size={40}
+                        cursor="pointer"
+                    />
+                }
+            />
+            <Spacer />
+            <SideMenuProfileItem letter={user?.name.charAt(0).toUpperCase()} />
+            <SideMenuItem
+                action={onLogout}
+                tooltip={'logout'}
+                icon={<FiLogOut color={'white'} size={40} cursor={'pointer'} />}
+            />
         </Flex>
     )
 }
-
 export default SideMenu

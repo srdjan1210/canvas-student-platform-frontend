@@ -1,4 +1,6 @@
+import { User } from '../dtos/user.dto'
+
 export type AuthStoreState = {
-    token: string | null,
-    role: number | null,
+    token: string | null
+    user: User | null
 }
