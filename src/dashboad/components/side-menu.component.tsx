@@ -38,17 +38,32 @@ export const SideMenu = () => {
                 />
             )}
 
-            <SideMenuItem
-                tooltip={'Courses'}
-                link={'/courses'}
-                icon={
-                    <MdOutlinePlayLesson
-                        color="white"
-                        size={40}
-                        cursor="pointer"
-                    />
-                }
-            />
+            {user?.role === 'STUDENT' && (
+                <SideMenuItem
+                    tooltip={'Courses'}
+                    link={'/dashboard/student'}
+                    icon={
+                        <MdOutlinePlayLesson
+                            color="white"
+                            size={40}
+                            cursor="pointer"
+                        />
+                    }
+                />
+            )}
+            {user?.role === 'PROFESSOR' && (
+                <SideMenuItem
+                    tooltip={'Courses'}
+                    link={'/dashboard/professor'}
+                    icon={
+                        <MdOutlinePlayLesson
+                            color="white"
+                            size={40}
+                            cursor="pointer"
+                        />
+                    }
+                />
+            )}
             <Spacer />
             <SideMenuProfileItem letter={user?.name.charAt(0).toUpperCase()} />
             <SideMenuItem

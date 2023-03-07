@@ -1,9 +1,10 @@
 import { LoginDto } from '../../store/auth-store/dtos/login.dto'
 import { getAxios } from './axios-instance'
-import { User } from '../../store/auth-store/dtos/user.dto'
+
 import axios, { AxiosError } from 'axios'
 import { ProfessorRegistrationDto } from '../../store/auth-store/dtos/professor-registration.dto'
 import { toast } from 'react-toastify'
+import { User } from '../../auth/model/user.model'
 
 class AuthService {
     async login({ email, password }: LoginDto) {

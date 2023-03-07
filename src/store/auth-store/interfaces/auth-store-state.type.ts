@@ -1,4 +1,4 @@
-import { User } from '../dtos/user.dto'
+import { User } from '../../../auth/model/user.model'
 
 export type AuthStoreState = {
     token: string | null

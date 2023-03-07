@@ -12,7 +12,6 @@ import {
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { REGISTRATION_VALIDATION_SCHEMA } from '../auth.constants'
-import { InputLabel } from '../components/input-label.component'
 import { useState } from 'react'
 import { SubmitButton } from '../components/submit-button.component'
 import { useApplicationStore } from '../../store/application.store'
