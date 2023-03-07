@@ -4,7 +4,6 @@ import { LoginDto } from './dtos/login.dto'
 import { AuthStoreActions } from './interfaces/auth-store-actions.type'
 import { AuthStoreState } from './interfaces/auth-store-state.type'
 import { ProfessorRegistrationDto } from './dtos/professor-registration.dto'
-import { toast } from 'react-toastify'
 
 export type AuthStore = AuthStoreState & AuthStoreActions
 
