@@ -9,10 +9,11 @@ import {
     AiOutlineFilePpt,
 } from 'react-icons/ai'
 import { Flex, Text } from '@chakra-ui/react'
+import { IoMdArrowBack } from 'react-icons/io'
 
 interface Props {
     filename: string
-    type: 'folder' | 'file'
+    type: 'folder' | 'file' | 'back'
     onClick: () => void
 }
 
@@ -42,11 +43,11 @@ export const FlatFileView = ({ filename, type, onClick }: Props) => {
             }}
         >
             <Flex alignItems={'center'}>
-                {type === 'folder' ? (
+                {type === 'folder' && (
                     <AiFillFolder size={ICON_SIZE} color={'#03b1fc'} />
-                ) : (
-                    files[extension]
                 )}
+                {type === 'file' && files[extension]}
+                {type === 'back' && <IoMdArrowBack size={ICON_SIZE} />}
                 <Text
                     fontSize={'1.2em'}
                     fontWeight={'bold'}

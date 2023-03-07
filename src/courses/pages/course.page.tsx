@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom'
-import { Button, Flex } from '@chakra-ui/react'
+import { Button, Flex, Spinner } from '@chakra-ui/react'
 import { FileBoxOverview } from '../components/files/file-box-overview.component'
 import { CourseFile } from '../model/course-file.model'
 import { useEffect, useState } from 'react'
@@ -18,12 +18,16 @@ export const CoursePage = () => {
     const [announcements, setAnnouncements] = useState<Announcement[]>([])
     const [currentFolder, setCurrentFolder] = useState<string>(name ?? '')
     const layoutType = useApplicationStore((state) => state.boxType)
+    const setSpinner = useApplicationStore((state) => state.setSpinner)
+    const spinner = useApplicationStore((state) => state.fileSpinner)
 
     const goBack = () => {
+        setSpinner(true)
         const chunks = currentFolder.split('/')
         if (chunks.length == 1) return
         const newFolder = chunks.slice(0, chunks.length - 1).join('/')
         setCurrentFolder(newFolder)
+        setSpinner(false)
     }
 
     const goToFolder = (newFolder: string) => {
@@ -31,8 +35,10 @@ export const CoursePage = () => {
     }
 
     const listFiles = async () => {
+        setSpinner(true)
         const files = await courseService.listFiles(currentFolder)
         setFiles(files as CourseFile[])
+        setSpinner(false)
     }
 
     const downloadFile = async (filename: string) => {
@@ -49,34 +55,45 @@ export const CoursePage = () => {
     }, [])
 
     return (
-        <Flex w={'100%'}>
-            <Flex flex={5} direction={'column'} padding={10} gap={10}>
+        <Flex w={'100%'} position={'relative'}>
+            <Flex
+                flex={5}
+                direction={'column'}
+                padding={10}
+                justifyContent={'flex-start'}
+            >
                 <FileSearchBar path={currentFolder} />
-                {currentFolder !== name && (
-                    <Button
-                        onClick={() => goBack()}
-                        minH={50}
-                        margin={'0 auto'}
-                        w={'100%'}
-                    >
-                        Go Back
-                    </Button>
-                )}
                 {layoutType === 'grid' ? (
                     <FileBoxOverview
                         files={files}
                         goToFolder={(folder: string) => goToFolder(folder)}
                         downloadFile={(file) => downloadFile(file)}
+                        goBack={() => goBack()}
+                        isFolderRoot={currentFolder === name}
                     />
                 ) : (
                     <FileListOverview
                         files={files}
                         goToFolder={(folder: string) => goToFolder(folder)}
                         downloadFile={(file) => downloadFile(file)}
+                        goBack={() => goBack()}
+                        isFolderRoot={currentFolder === name}
                     />
                 )}
             </Flex>
             <SideAnnouncements announcements={announcements} />
+            {spinner && (
+                <Flex
+                    alignItems={'center'}
+                    justifyContent={'center'}
+                    position={'absolute'}
+                    w={'100%'}
+                    h={'100%'}
+                    background={'rgba(1, 1, 1, 0.5)'}
+                >
+                    <Spinner boxSize={40} color={'white'} />
+                </Flex>
+            )}
         </Flex>
     )
 }

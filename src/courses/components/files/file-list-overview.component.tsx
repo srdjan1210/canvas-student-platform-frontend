@@ -8,12 +8,16 @@ interface Props {
     files: CourseFile[]
     goToFolder: (folder: string) => void
     downloadFile: (filename: string) => void
+    goBack: () => void
+    isFolderRoot: boolean
 }
 
 export const FileListOverview = ({
     files,
     downloadFile,
     goToFolder,
+    goBack,
+    isFolderRoot,
 }: Props) => {
     const handleClick = (file: CourseFile) => {
         if (file.type === 'folder') {
@@ -42,6 +46,13 @@ export const FileListOverview = ({
                 },
             }}
         >
+            {!isFolderRoot && (
+                <FlatFileView
+                    filename={'Go Back'}
+                    type={'back'}
+                    onClick={() => goBack()}
+                />
+            )}
             {files.map((file, index) => (
                 <FlatFileView
                     key={index}

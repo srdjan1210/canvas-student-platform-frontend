@@ -9,11 +9,13 @@ import {
     addProxyDefaultValue,
     extractFileExtension,
 } from '../../../shared/utils/utils'
+
+import { IoMdArrowBack } from 'react-icons/io'
 import { Link } from 'react-router-dom'
 
 interface Props {
     filename: string
-    type: 'folder' | 'file'
+    type: 'folder' | 'file' | 'back'
     onClick: () => void
 }
 
@@ -21,7 +23,7 @@ export const FileView = ({ filename, type, onClick }: Props) => {
     const files = addProxyDefaultValue(
         {
             pdf: <AiOutlineFilePdf size={'100%'} color={'red'} />,
-            powerpoint: <AiOutlineFilePpt size={'100%'} color={'orange'} />,
+            ppt: <AiOutlineFilePpt size={'100%'} color={'orange'} />,
         },
         <AiOutlineFile size={'100%'} />
     )
@@ -42,11 +44,11 @@ export const FileView = ({ filename, type, onClick }: Props) => {
             _hover={{ boxShadow: '2xl' }}
         >
             <Flex flex={2}>
-                {type === 'folder' ? (
+                {type === 'folder' && (
                     <AiFillFolder size={'100%'} color={'#03b1fc'} />
-                ) : (
-                    files[extension]
                 )}
+                {type === 'file' && files[extension]}
+                {type === 'back' && <IoMdArrowBack size={'100%'} />}
             </Flex>
             <Text
                 fontSize={'1.2em'}

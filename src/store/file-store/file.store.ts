@@ -7,6 +7,7 @@ export type FileStore = FileStoreState & FileStoreActions
 
 const state: FileStoreState = {
     boxType: 'grid',
+    fileSpinner: false,
 }
 
 export const fileStoreSlice: StateCreator<FileStore> = (set) => ({
@@ -14,6 +15,11 @@ export const fileStoreSlice: StateCreator<FileStore> = (set) => ({
     setBoxType: (val: FileBoxType) => {
         set((state) => ({
             boxType: val,
+        }))
+    },
+    setSpinner: (value: boolean) => {
+        set((state) => ({
+            fileSpinner: value,
         }))
     },
 })

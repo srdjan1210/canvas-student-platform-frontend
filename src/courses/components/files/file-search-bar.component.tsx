@@ -1,4 +1,4 @@
-import { Flex, Input, Text } from '@chakra-ui/react'
+import { Flex, Input, Text, Tooltip } from '@chakra-ui/react'
 import { FileBoxSwitch } from './file-box-switch.component'
 
 interface Props {
@@ -13,6 +13,7 @@ export const FileSearchBar = ({ path }: Props) => {
             alignItems={'center'}
             gap={10}
             h={100}
+            minH={100}
             position={'relative'}
         >
             <Flex gap={10} alignItems={'center'}>
@@ -20,19 +21,21 @@ export const FileSearchBar = ({ path }: Props) => {
                 <FileBoxSwitch />
             </Flex>
 
-            <Text
-                fontSize={'1.4em'}
-                fontWeight={'bold'}
-                justifySelf={'flex-start'}
-                position={'absolute'}
-                left={'0'}
-                maxW={200}
-                overflow={'hidden'}
-                textOverflow={'ellipsis'}
-                whiteSpace={'nowrap'}
-            >
-                {path}
-            </Text>
+            <Tooltip label={path}>
+                <Text
+                    fontSize={'1.4em'}
+                    fontWeight={'bold'}
+                    justifySelf={'flex-start'}
+                    position={'absolute'}
+                    left={'0'}
+                    maxW={200}
+                    overflow={'hidden'}
+                    textOverflow={'ellipsis'}
+                    whiteSpace={'nowrap'}
+                >
+                    {path}
+                </Text>
+            </Tooltip>
         </Flex>
     )
 }

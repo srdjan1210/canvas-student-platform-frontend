@@ -6,9 +6,17 @@ interface Props {
     files: CourseFile[]
     goToFolder: (folder: string) => void
     downloadFile: (filename: string) => void
+    goBack: () => void
+    isFolderRoot: boolean
 }
 
-export const FileBoxOverview = ({ files, goToFolder, downloadFile }: Props) => {
+export const FileBoxOverview = ({
+    files,
+    goToFolder,
+    downloadFile,
+    goBack,
+    isFolderRoot,
+}: Props) => {
     const handleClick = (file: CourseFile) => {
         if (file.type === 'folder') {
             goToFolder(file.filename)
@@ -38,6 +46,13 @@ export const FileBoxOverview = ({ files, goToFolder, downloadFile }: Props) => {
                 },
             }}
         >
+            {!isFolderRoot && (
+                <FileView
+                    filename={'Go Back'}
+                    type={'back'}
+                    onClick={() => goBack()}
+                />
+            )}
             {files.map((file, index) => (
                 <FileView
                     key={index}
