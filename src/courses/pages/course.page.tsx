@@ -11,6 +11,7 @@ import { download } from '../../shared/utils/download'
 import { useApplicationStore } from '../../store/application.store'
 import { FileListOverview } from '../components/files/file-list-overview.component'
 import { ANNOUNCEMENTS_MOCK } from '../mock/mock'
+import { toast } from 'react-toastify'
 
 export const CoursePage = () => {
     const { name } = useParams()
@@ -46,6 +47,26 @@ export const CoursePage = () => {
         download(link, filename)
     }
 
+    const createFolder = async (folder: string) => {
+        if (folder.trim() === '') {
+            toast.error('Folder name should not be empty')
+            return
+        }
+        setSpinner(true)
+        await courseService.createFolder(currentFolder + '/' + folder)
+        await listFiles()
+        setSpinner(false)
+    }
+
+    const uploadFile = async (file: File | null) => {
+        if (file != null) {
+            setSpinner(true)
+            await courseService.uploadFile(file, currentFolder)
+            await listFiles()
+            setSpinner(false)
+        }
+    }
+
     useEffect(() => {
         listFiles()
     }, [currentFolder])
@@ -62,7 +83,11 @@ export const CoursePage = () => {
                 padding={10}
                 justifyContent={'flex-start'}
             >
-                <FileSearchBar path={currentFolder} />
+                <FileSearchBar
+                    path={currentFolder}
+                    onCreateFolder={createFolder}
+                    onUploadFile={uploadFile}
+                />
                 {layoutType === 'grid' ? (
                     <FileBoxOverview
                         files={files}

@@ -6,6 +6,8 @@ import { Dashboard } from '../dashboad/pages/dashboard.page'
 import StudentCoursesPage from '../courses/pages/student-courses.page'
 import { CoursePage } from '../courses/pages/course.page'
 import StudentPage from '../shared/pages/student.page'
+import ProfessorCoursesPage from '../courses/pages/professor-courses.page'
+import ProfessorPage from '../shared/pages/professor.page'
 
 export const routes: RouteObject[] = [
     {
@@ -31,6 +33,16 @@ export const routes: RouteObject[] = [
                             {
                                 path: 'course/:name',
                                 element: <CoursePage />,
+                            },
+                        ],
+                    },
+                    {
+                        path: 'professor',
+                        element: <ProfessorPage />,
+                        children: [
+                            {
+                                path: '',
+                                element: <ProfessorCoursesPage />,
                             },
                         ],
                     },

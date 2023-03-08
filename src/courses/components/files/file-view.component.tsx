@@ -11,7 +11,6 @@ import {
 } from '../../../shared/utils/utils'
 
 import { IoMdArrowBack } from 'react-icons/io'
-import { Link } from 'react-router-dom'
 
 interface Props {
     filename: string
