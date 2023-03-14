@@ -1,5 +1,7 @@
 import { CourseFile } from '../../model/course-file.model'
 import { Flex } from '@chakra-ui/react'
+import { courseService } from '../../services/course.service'
+import FileView from './file-view.component'
 import FlatFileView from './flat-file-view.component'
 
 interface Props {

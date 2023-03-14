@@ -46,14 +46,7 @@ export const LoginPage = () => {
         mode: 'onChange',
     })
     const login = async ({ email, password }: FormValues) => {
-        const { error, data } = await signIn({ email, password })
-        console.log(error, data)
-        if (!error) {
-            toast.success('Successfull login!')
-            navigate('/dashboard')
-            return
-        }
-        toast.error('Invalid credentials')
+        await signIn({ email, password })
     }
 
     return (

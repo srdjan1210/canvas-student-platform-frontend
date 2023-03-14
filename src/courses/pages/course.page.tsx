@@ -1,17 +1,17 @@
 import { useParams } from 'react-router-dom'
-import { Flex, Spinner } from '@chakra-ui/react'
+import { Button, Flex, Spinner } from '@chakra-ui/react'
 import { FileBoxOverview } from '../components/files/file-box-overview.component'
 import { CourseFile } from '../model/course-file.model'
 import { useEffect, useState } from 'react'
 import { SideAnnouncements } from '../components/side-announcements.component'
 import { Announcement } from '../model/announcement.model'
 import { FileSearchBar } from '../components/files/file-search-bar.component'
+import { courseService } from '../services/course.service'
 import { download } from '../../shared/utils/download'
 import { useApplicationStore } from '../../store/application.store'
 import { FileListOverview } from '../components/files/file-list-overview.component'
 import { ANNOUNCEMENTS_MOCK } from '../mock/mock'
 import { toast } from 'react-toastify'
-import useCourseService from '../services/course.service'
 
 export const CoursePage = () => {
     const { name } = useParams()
@@ -21,8 +21,6 @@ export const CoursePage = () => {
     const layoutType = useApplicationStore((state) => state.boxType)
     const setSpinner = useApplicationStore((state) => state.setSpinner)
     const spinner = useApplicationStore((state) => state.fileSpinner)
-    const { listFiles, getDownloadUrl, createFolder, uploadFile } =
-        useCourseService()
 
     const goBack = () => {
         setSpinner(true)
@@ -37,40 +35,40 @@ export const CoursePage = () => {
         setCurrentFolder(currentFolder + '/' + newFolder)
     }
 
-    const listFolderFiles = async () => {
+    const listFiles = async () => {
         setSpinner(true)
-        const files = await listFiles(currentFolder)
+        const files = await courseService.listFiles(currentFolder)
         setFiles(files as CourseFile[])
         setSpinner(false)
     }
 
     const downloadFile = async (filename: string) => {
-        const link = await getDownloadUrl(currentFolder, filename)
+        const link = await courseService.getDownloadUrl(currentFolder, filename)
         download(link, filename)
     }
 
-    const createNewFolder = async (folder: string) => {
+    const createFolder = async (folder: string) => {
         if (folder.trim() === '') {
             toast.error('Folder name should not be empty')
             return
         }
         setSpinner(true)
-        await createFolder(currentFolder + '/' + folder)
-        await listFolderFiles()
+        await courseService.createFolder(currentFolder + '/' + folder)
+        await listFiles()
         setSpinner(false)
     }
 
-    const uploadNewFile = async (file: File | null) => {
+    const uploadFile = async (file: File | null) => {
         if (file != null) {
             setSpinner(true)
-            await uploadFile(file, currentFolder)
-            await listFolderFiles()
+            await courseService.uploadFile(file, currentFolder)
+            await listFiles()
             setSpinner(false)
         }
     }
 
     useEffect(() => {
-        listFolderFiles()
+        listFiles()
     }, [currentFolder])
 
     useEffect(() => {
@@ -87,8 +85,8 @@ export const CoursePage = () => {
             >
                 <FileSearchBar
                     path={currentFolder}
-                    onCreateFolder={createNewFolder}
-                    onUploadFile={uploadNewFile}
+                    onCreateFolder={createFolder}
+                    onUploadFile={uploadFile}
                 />
                 {layoutType === 'grid' ? (
                     <FileBoxOverview

@@ -2,9 +2,11 @@ import { Box, Button, Flex } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
 import FileUpload from './file-upload.component'
 import { useEffect, useState } from 'react'
+import { courseService } from '../../services/course.service'
 import { AiOutlineUpload } from 'react-icons/ai'
 import { BsFillTrashFill } from 'react-icons/bs'
 import { IoMdAdd } from 'react-icons/io'
+import { useApplicationStore } from '../../../store/application.store'
 import { InputButton } from '../input-button.component'
 
 interface Props {
