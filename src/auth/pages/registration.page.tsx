@@ -15,6 +15,7 @@ import { REGISTRATION_VALIDATION_SCHEMA } from '../auth.constants'
 import { useState } from 'react'
 import { SubmitButton } from '../components/submit-button.component'
 import { useApplicationStore } from '../../store/application.store'
+import useAuthService from '../../shared/services/auth.service'
 
 type FormValues = {
     email: string
@@ -34,9 +35,7 @@ enum FormType {
 
 export const RegistrationPage = () => {
     const [role, setRole] = useState(FormType.PROFESSOR)
-    const registerProfessor = useApplicationStore(
-        (state) => state.registerProfessor
-    )
+    const { registerProfessor } = useAuthService()
 
     const defaultValues: FormValues = {
         email: '',
@@ -60,7 +59,7 @@ export const RegistrationPage = () => {
         mode: 'onChange',
     })
 
-    const onSubmit = ({
+    const onSubmit = async ({
         email,
         name,
         surname,
@@ -68,7 +67,7 @@ export const RegistrationPage = () => {
         password,
     }: FormValues) => {
         if (role === FormType.PROFESSOR) {
-            registerProfessor({
+            await registerProfessor({
                 email,
                 name,
                 surname,

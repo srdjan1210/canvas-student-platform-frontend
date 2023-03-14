@@ -8,6 +8,7 @@ import { CoursePage } from '../courses/pages/course.page'
 import StudentPage from '../shared/pages/student.page'
 import ProfessorCoursesPage from '../courses/pages/professor-courses.page'
 import ProfessorPage from '../shared/pages/professor.page'
+import { AuthWrapper } from '../auth/components/auth.wrapper'
 
 export const routes: RouteObject[] = [
     {
@@ -20,31 +21,45 @@ export const routes: RouteObject[] = [
             },
             {
                 path: 'dashboard',
-                element: <Dashboard />,
+                element: (
+                    <AuthWrapper
+                        roles={['ADMINISTRATOR', 'PROFESSOR', 'STUDENT']}
+                    >
+                        <Dashboard />
+                    </AuthWrapper>
+                ),
                 children: [
                     {
                         path: 'student',
-                        element: <StudentPage />,
+                        element: (
+                            <AuthWrapper roles={['STUDENT']}>
+                                <StudentPage />
+                            </AuthWrapper>
+                        ),
                         children: [
                             {
                                 path: '',
                                 element: <StudentCoursesPage />,
                             },
-                            {
-                                path: 'course/:name',
-                                element: <CoursePage />,
-                            },
                         ],
                     },
                     {
                         path: 'professor',
-                        element: <ProfessorPage />,
+                        element: (
+                            <AuthWrapper roles={['PROFESSOR']}>
+                                <ProfessorPage />,
+                            </AuthWrapper>
+                        ),
                         children: [
                             {
                                 path: '',
                                 element: <ProfessorCoursesPage />,
                             },
                         ],
+                    },
+                    {
+                        path: 'courses/:name',
+                        element: <CoursePage />,
                     },
                     {
                         path: 'registration',

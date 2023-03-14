@@ -1,9 +1,7 @@
 import { StateCreator } from 'zustand'
-import { authService } from '../../shared/services/auth.service'
 import { LoginDto } from './dtos/login.dto'
 import { AuthStoreActions } from './interfaces/auth-store-actions.type'
 import { AuthStoreState } from './interfaces/auth-store-state.type'
-import { ProfessorRegistrationDto } from './dtos/professor-registration.dto'
 
 export type AuthStore = AuthStoreState & AuthStoreActions
 
@@ -12,23 +10,80 @@ const state: AuthStoreState = {
     user: null,
 }
 
-export const authStoreSlice: StateCreator<AuthStore> = (set) => ({
+export const authStoreSlice: StateCreator<AuthStore> = (set, get) => ({
     ...state,
     login: async (dto: LoginDto) => {
-        const token = await authService.login(dto)
-        const user = await authService.getMe(token)
+        const tokenData = await get().getToken(dto)
+        if (tokenData.error) return { data: null, error: tokenData.error }
+        const userData = await get().getMe(tokenData.data ?? '')
+
+        console.log(tokenData.data, userData.data)
         set((state) => ({
-            token,
-            user,
+            token: tokenData.data,
+            user: userData.data,
         }))
-    },
-    registerProfessor: async (dto: ProfessorRegistrationDto) => {
-        await authService.registerProfessor(dto)
+
+        return {
+            data: null,
+            error: null,
+        }
     },
     logout: () => {
         set((state) => ({
             token: null,
             user: null,
         }))
+    },
+    getToken: async ({ email, password }: LoginDto) => {
+        try {
+            const resp = await fetch(
+                `${process.env.REACT_APP_BACKEND_URL}/auth/login`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password }),
+                }
+            )
+            const data = await resp.json()
+            if (resp.status != 200) {
+                return {
+                    data: null,
+                    error: data.message,
+                }
+            }
+            return {
+                data: data.access_token,
+                error: null,
+            }
+        } catch (e: any) {
+            return {
+                data: null,
+                error: e,
+            }
+        }
+    },
+    getMe: async (token: string) => {
+        try {
+            const resp = await fetch(
+                `${process.env.REACT_APP_BACKEND_URL}/auth/me`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            )
+            const data = await resp.json()
+            return {
+                data,
+                error: null,
+            }
+        } catch (e: any) {
+            return {
+                data: null,
+                error: e,
+            }
+        }
     },
 })

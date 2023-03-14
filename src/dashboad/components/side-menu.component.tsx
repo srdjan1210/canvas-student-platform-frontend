@@ -5,18 +5,21 @@ import { IoMdCreate } from 'react-icons/io'
 import { MdOutlinePlayLesson } from 'react-icons/md'
 import { SideMenuProfileItem } from './side-menu-profile-item'
 import { useApplicationStore } from '../../store/application.store'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 export const SideMenu = () => {
     const navigate = useNavigate()
-
     const user = useApplicationStore((state) => state.user)
     const logout = useApplicationStore((state) => state.logout)
-    console.log(user)
     const onLogout = () => {
         logout()
         navigate('/login')
     }
+
+    useEffect(() => {
+        console.log(user)
+    }, [user])
 
     return (
         <Flex
@@ -65,7 +68,7 @@ export const SideMenu = () => {
                 />
             )}
             <Spacer />
-            <SideMenuProfileItem letter={user?.name.charAt(0).toUpperCase()} />
+            <SideMenuProfileItem letter={user?.name?.charAt(0).toUpperCase()} />
             <SideMenuItem
                 action={onLogout}
                 tooltip={'logout'}

@@ -1,11 +1,20 @@
-import { getAxios } from '../../shared/services/axios-instance'
+import { useAxios } from '../../shared/services/axios-instance'
 import fileDownload from 'js-file-download'
 import { toast } from 'react-toastify'
 
-class CourseService {
-    async getStudentCourses() {
+export const useCourseService = () => {
+    const { axios } = useAxios()
+    const getStudentCourses = async () => {
         try {
-            const resp = await getAxios().get('/courses/student')
+            const resp = await axios.get('/courses/student')
+            return resp.data
+        } catch (e: any) {
+            return []
+        }
+    }
+    const getProfessorCourses = async () => {
+        try {
+            const resp = await axios.get('/courses/professor')
             return resp.data
         } catch (e: any) {
             console.log(e)
@@ -13,20 +22,10 @@ class CourseService {
         }
     }
 
-    async getProfessorCourses() {
-        try {
-            const resp = await getAxios().get('/courses/professor')
-            return resp.data
-        } catch (e: any) {
-            console.log(e)
-            return []
-        }
-    }
-
-    async getDownloadUrl(folder: string, file: string) {
+    const getDownloadUrl = async (folder: string, file: string) => {
         try {
             const encoded = encodeURIComponent(folder)
-            const resp = await getAxios().get(
+            const resp = await axios.get(
                 `/courses/download/folder/${encoded}/file/${file}`
             )
             fileDownload(resp.data.downloadLink, '')
@@ -37,12 +36,10 @@ class CourseService {
         }
     }
 
-    async listFiles(folder: string) {
+    const listFiles = async (folder: string) => {
         try {
             const encoded = encodeURIComponent(folder)
-            const files = await getAxios().get(
-                `/courses/list/folder/${encoded}`
-            )
+            const files = await axios.get(`/courses/list/folder/${encoded}`)
             return files.data
         } catch (e: any) {
             console.log(e)
@@ -50,13 +47,10 @@ class CourseService {
         }
     }
 
-    async createFolder(folder: string) {
+    const createFolder = async (folder: string) => {
         try {
             const encoded = encodeURIComponent(folder)
-            const files = await getAxios().post(
-                `/courses/folder/${encoded}`,
-                {}
-            )
+            const files = await axios.post(`/courses/folder/${encoded}`, {})
 
             toast.success('Successfully created folder')
             return files.data
@@ -67,13 +61,13 @@ class CourseService {
         }
     }
 
-    async uploadFile(file: File, folder: string) {
+    const uploadFile = async (file: File, folder: string) => {
         try {
             const encoded = encodeURIComponent(folder)
             const formData = new FormData()
             formData.append('file', file)
 
-            const resp = await getAxios().put(
+            const resp = await axios.put(
                 `courses/folder/${encoded}/upload/file`,
                 formData,
                 {
@@ -83,12 +77,20 @@ class CourseService {
                 }
             )
             toast.success('Successfully uploaded file!')
-            console.log(resp.data)
         } catch (e: any) {
             console.log(e)
             toast.error(e.response.data.message)
         }
     }
+
+    return {
+        getStudentCourses,
+        getProfessorCourses,
+        getDownloadUrl,
+        listFiles,
+        uploadFile,
+        createFolder,
+    }
 }
 
-export const courseService = new CourseService()
+export default useCourseService
