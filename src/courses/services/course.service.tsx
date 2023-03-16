@@ -83,6 +83,45 @@ export const useCourseService = () => {
         }
     }
 
+    const addStudentsToCourse = async (course: string, students: number[]) => {
+        try {
+            await axios.post(`/courses/${course}/students/add`, { students })
+            toast.success(`Students successfully added to course ${course}!`)
+            return {
+                error: null,
+                data: 'success',
+            }
+        } catch (e: any) {
+            toast.error('Something wrong with commiting!')
+            return {
+                error: 'Something wrong with commiting',
+                data: null,
+            }
+        }
+    }
+
+    const addProfessorsToCourse = async (
+        course: string,
+        professors: number[]
+    ) => {
+        try {
+            await axios.post(`/courses/${course}/professors/add`, {
+                professors,
+            })
+            toast.success(`Professors successfully added to course ${course}!`)
+            return {
+                error: null,
+                data: 'success',
+            }
+        } catch (e: any) {
+            toast.error('Something wrong with commiting!')
+            return {
+                error: 'Something wrong with commiting',
+                data: null,
+            }
+        }
+    }
+
     return {
         getStudentCourses,
         getProfessorCourses,
@@ -90,6 +129,8 @@ export const useCourseService = () => {
         listFiles,
         uploadFile,
         createFolder,
+        addStudentsToCourse,
+        addProfessorsToCourse,
     }
 }
 

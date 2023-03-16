@@ -20,7 +20,7 @@ export const CoursePage = () => {
     const [currentFolder, setCurrentFolder] = useState<string>(name ?? '')
     const layoutType = useApplicationStore((state) => state.boxType)
     const setSpinner = useApplicationStore((state) => state.setSpinner)
-    const spinner = useApplicationStore((state) => state.fileSpinner)
+    const spinner = useApplicationStore((state) => state.spinner)
     const { listFiles, getDownloadUrl, createFolder, uploadFile } =
         useCourseService()
 

@@ -2,5 +2,5 @@ import { FileBoxType } from '../../../courses/components/files/file-box-switch.c
 
 export type FileStoreState = {
     boxType: FileBoxType
-    fileSpinner: boolean
+    spinner: boolean
 }

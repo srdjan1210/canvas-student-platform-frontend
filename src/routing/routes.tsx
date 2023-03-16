@@ -9,6 +9,9 @@ import StudentPage from '../shared/pages/student.page'
 import ProfessorCoursesPage from '../courses/pages/professor-courses.page'
 import ProfessorPage from '../shared/pages/professor.page'
 import { AuthWrapper } from '../auth/components/auth.wrapper'
+import { StudentDashboardPage } from '../users/pages/student-dashboard.page'
+import React from 'react'
+import { CourseTransferStudentsPage } from '../courses/pages/course-transfer-students.page'
 
 export const routes: RouteObject[] = [
     {
@@ -29,6 +32,14 @@ export const routes: RouteObject[] = [
                     </AuthWrapper>
                 ),
                 children: [
+                    {
+                        path: 'students',
+                        element: (
+                            <AuthWrapper roles={['ADMINISTRATOR']}>
+                                <StudentDashboardPage />
+                            </AuthWrapper>
+                        ),
+                    },
                     {
                         path: 'student',
                         element: (
@@ -60,6 +71,14 @@ export const routes: RouteObject[] = [
                     {
                         path: 'courses/:name',
                         element: <CoursePage />,
+                    },
+                    {
+                        path: 'courses/:title/add/students',
+                        element: (
+                            <AuthWrapper roles={['ADMINISTRATOR']}>
+                                <CourseTransferStudentsPage />
+                            </AuthWrapper>
+                        ),
                     },
                     {
                         path: 'registration',

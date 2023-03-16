@@ -2,7 +2,7 @@ import { Flex, Spacer } from '@chakra-ui/react'
 import { SideMenuItem } from './side-menu-item.component'
 import { FiLogOut } from 'react-icons/fi'
 import { IoMdCreate } from 'react-icons/io'
-import { MdOutlinePlayLesson } from 'react-icons/md'
+import { MdOutlineAccountCircle, MdOutlinePlayLesson } from 'react-icons/md'
 import { SideMenuProfileItem } from './side-menu-profile-item'
 import { useApplicationStore } from '../../store/application.store'
 import { useEffect } from 'react'
@@ -60,6 +60,19 @@ export const SideMenu = () => {
                     link={'/dashboard/professor'}
                     icon={
                         <MdOutlinePlayLesson
+                            color="white"
+                            size={40}
+                            cursor="pointer"
+                        />
+                    }
+                />
+            )}
+            {user?.role === 'ADMINISTRATOR' && (
+                <SideMenuItem
+                    tooltip={'Students'}
+                    link={'/dashboard/students'}
+                    icon={
+                        <MdOutlineAccountCircle
                             color="white"
                             size={40}
                             cursor="pointer"
