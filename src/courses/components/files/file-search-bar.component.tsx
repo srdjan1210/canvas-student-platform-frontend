@@ -2,16 +2,19 @@ import { Flex, Input, Text, Tooltip } from '@chakra-ui/react'
 import { FileBoxSwitch } from './file-box-switch.component'
 import { ProfessorFileOptions } from './professor-file-options.component'
 import { useApplicationStore } from '../../../store/application.store'
+import { AdminCourseOptions } from '../admin-course.options.component'
 
 interface Props {
     path?: string
     onCreateFolder: (folder: string) => void
     onUploadFile: (file: File | null) => void
+    course: string
 }
 export const FileSearchBar = ({
     path,
     onCreateFolder,
     onUploadFile,
+    course,
 }: Props) => {
     const user = useApplicationStore((state) => state.user)
     return (
@@ -52,6 +55,9 @@ export const FileSearchBar = ({
                     onCreateFolder={onCreateFolder}
                     onUploadFile={onUploadFile}
                 />
+            )}
+            {user?.role === 'ADMINISTRATOR' && (
+                <AdminCourseOptions course={course} />
             )}
         </Flex>
     )

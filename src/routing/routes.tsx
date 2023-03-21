@@ -12,6 +12,12 @@ import { AuthWrapper } from '../auth/components/auth.wrapper'
 import { StudentDashboardPage } from '../users/pages/student-dashboard.page'
 import React from 'react'
 import { CourseTransferStudentsPage } from '../courses/pages/course-transfer-students.page'
+import { CourseTransferProfessorsPage } from '../courses/pages/course-transfer-professors.page'
+import { CourseCoordinatorPage } from '../courses/pages/course-coordinator.page'
+import { AdminCoursesPage } from '../courses/pages/admin-courses.page'
+import { AdminPage } from '../shared/pages/admin.page'
+import CourseStudentListingPage from '../courses/pages/course-student-listing.page'
+import { CourseProfessorListingPage } from '../courses/pages/course-professor-listing.page'
 
 export const routes: RouteObject[] = [
     {
@@ -69,16 +75,60 @@ export const routes: RouteObject[] = [
                         ],
                     },
                     {
-                        path: 'courses/:name',
-                        element: <CoursePage />,
-                    },
-                    {
-                        path: 'courses/:title/add/students',
+                        path: 'administrator',
                         element: (
                             <AuthWrapper roles={['ADMINISTRATOR']}>
-                                <CourseTransferStudentsPage />
+                                <AdminPage />
                             </AuthWrapper>
                         ),
+                        children: [
+                            {
+                                path: '',
+                                element: <AdminCoursesPage />,
+                            },
+                        ],
+                    },
+                    {
+                        path: 'courses',
+                        element: <CourseCoordinatorPage />,
+                        children: [
+                            {
+                                path: ':name',
+                                element: <CoursePage />,
+                            },
+                            {
+                                path: ':title/add/students',
+                                element: (
+                                    <AuthWrapper roles={['ADMINISTRATOR']}>
+                                        <CourseTransferStudentsPage />
+                                    </AuthWrapper>
+                                ),
+                            },
+                            {
+                                path: ':title/add/professors',
+                                element: (
+                                    <AuthWrapper roles={['ADMINISTRATOR']}>
+                                        <CourseTransferProfessorsPage />
+                                    </AuthWrapper>
+                                ),
+                            },
+                            {
+                                path: ':title/list/students',
+                                element: (
+                                    <AuthWrapper roles={['ADMINISTRATOR']}>
+                                        <CourseStudentListingPage />
+                                    </AuthWrapper>
+                                ),
+                            },
+                            {
+                                path: ':title/list/professors',
+                                element: (
+                                    <AuthWrapper roles={['ADMINISTRATOR']}>
+                                        <CourseProfessorListingPage />
+                                    </AuthWrapper>
+                                ),
+                            },
+                        ],
                     },
                     {
                         path: 'registration',

@@ -28,7 +28,8 @@ export const LoginPage = () => {
 
     useEffect(() => {
         if (token !== null) {
-            setTimeout(() => navigate('/dashboard'), 1000)
+            console.log('token')
+            //navigate('/dashboard')
         }
     }, [token])
 
@@ -47,10 +48,10 @@ export const LoginPage = () => {
     })
     const login = async ({ email, password }: FormValues) => {
         const { error, data } = await signIn({ email, password })
-        console.log(error, data)
         if (!error) {
             toast.success('Successfull login!')
-            navigate('/dashboard')
+            console.log(data)
+            navigate(`/dashboard/${data.data.role.toLowerCase()}`)
             return
         }
         toast.error('Invalid credentials')

@@ -89,6 +89,7 @@ export const CoursePage = () => {
                     path={currentFolder}
                     onCreateFolder={createNewFolder}
                     onUploadFile={uploadNewFile}
+                    course={name ?? ''}
                 />
                 {layoutType === 'grid' ? (
                     <FileBoxOverview

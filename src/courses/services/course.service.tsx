@@ -4,6 +4,54 @@ import { toast } from 'react-toastify'
 
 export const useCourseService = () => {
     const { axios } = useAxios()
+
+    const getAll = async () => {
+        try {
+            const resp = await axios.get('/courses?page=1&limit=100')
+            return resp.data
+        } catch (e: any) {
+            console.log(e)
+            return []
+        }
+    }
+
+    const getCourseStudents = async (
+        course: string,
+        page: number,
+        limit = 10
+    ) => {
+        try {
+            const resp = await axios.get(`/courses/${course}/students`, {
+                params: {
+                    page,
+                    limit,
+                },
+            })
+            return resp.data
+        } catch (e: any) {
+            console.log(e)
+            return []
+        }
+    }
+
+    const getCourseProfessors = async (
+        course: string,
+        page: number,
+        limit = 10
+    ) => {
+        try {
+            const resp = await axios.get(`/courses/${course}/professors`, {
+                params: {
+                    page,
+                    limit,
+                },
+            })
+            return resp.data
+        } catch (e: any) {
+            console.log(e)
+            return []
+        }
+    }
     const getStudentCourses = async () => {
         try {
             const resp = await axios.get('/courses/student')
@@ -131,6 +179,9 @@ export const useCourseService = () => {
         createFolder,
         addStudentsToCourse,
         addProfessorsToCourse,
+        getAll,
+        getCourseStudents,
+        getCourseProfessors,
     }
 }
 

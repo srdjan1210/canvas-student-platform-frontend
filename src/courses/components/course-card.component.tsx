@@ -1,4 +1,17 @@
-import { Flex, Text, Image, Tooltip } from '@chakra-ui/react'
+import {
+    Flex,
+    Text,
+    Image,
+    Tooltip,
+    MenuItem,
+    MenuGroup,
+    MenuDivider,
+    MenuList,
+    Button,
+    MenuButton,
+    Menu,
+} from '@chakra-ui/react'
+import { HiOutlineDotsVertical } from 'react-icons/hi'
 
 export interface Props {
     description: string
@@ -19,6 +32,7 @@ export const CourseCard = ({ title, description, onClick }: Props) => {
             _hover={{
                 boxShadow: 'dark-lg',
             }}
+            position={'relative'}
             onClick={() => (onClick ? onClick() : {})}
         >
             <Flex className="img" flex={2}>

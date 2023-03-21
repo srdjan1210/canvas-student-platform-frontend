@@ -10,6 +10,7 @@ export const ProfessorCoursesPage = () => {
     const [courses, setCourses] = useState<Course[]>([])
     const navigate = useNavigate()
     const { getProfessorCourses } = useCourseService()
+
     const loadCourses = async () => {
         const courses = await getProfessorCourses()
         setCourses(courses)
@@ -28,7 +29,13 @@ export const ProfessorCoursesPage = () => {
             {courses.length === 0 ? (
                 <NoCourses />
             ) : (
-                <Flex flexWrap={'wrap'} gap={20} padding={30}>
+                <Flex
+                    flexWrap={'wrap'}
+                    gap={20}
+                    padding={30}
+                    overflowY={'scroll'}
+                    w={'100%'}
+                >
                     {courses.map((course) => (
                         <CourseCard
                             key={course.id}

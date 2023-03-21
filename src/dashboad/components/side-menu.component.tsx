@@ -69,6 +69,20 @@ export const SideMenu = () => {
             )}
             {user?.role === 'ADMINISTRATOR' && (
                 <SideMenuItem
+                    tooltip={'Courses'}
+                    link={'/dashboard/administrator'}
+                    icon={
+                        <MdOutlinePlayLesson
+                            color="white"
+                            size={40}
+                            cursor="pointer"
+                        />
+                    }
+                />
+            )}
+
+            {user?.role === 'ADMINISTRATOR' && (
+                <SideMenuItem
                     tooltip={'Students'}
                     link={'/dashboard/students'}
                     icon={

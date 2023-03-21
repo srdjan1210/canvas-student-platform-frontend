@@ -24,7 +24,7 @@ export const authStoreSlice: StateCreator<AuthStore> = (set, get) => ({
         }))
 
         return {
-            data: null,
+            data: userData,
             error: null,
         }
     },

@@ -9,7 +9,7 @@ interface Props {
 
 export const AuthWrapper = ({ children, roles }: Props) => {
     const user = useApplicationStore((state) => state.user)
-    const token = useApplicationStore((state) => state.token)
+    const token = useApplicationStore().token
 
     if (!token) <Navigate to={'/login'} />
     if (roles.includes(user?.role ?? '')) {

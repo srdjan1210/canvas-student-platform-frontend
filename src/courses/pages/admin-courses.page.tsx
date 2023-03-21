@@ -1,17 +1,17 @@
-import { Flex } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { Course } from '../model/course.model'
-import CourseCard from '../components/course-card.component'
-import { NoCourses } from '../components/no-courses.component'
 import { useNavigate } from 'react-router-dom'
 import useCourseService from '../services/course.service'
+import { NoCourses } from '../components/no-courses.component'
+import { Flex } from '@chakra-ui/react'
+import CourseCard from '../components/course-card.component'
 
-export const StudentCoursesPage = () => {
+export const AdminCoursesPage = () => {
     const [courses, setCourses] = useState<Course[]>([])
     const navigate = useNavigate()
-    const { getStudentCourses } = useCourseService()
+    const { getAll } = useCourseService()
     const loadCourses = async () => {
-        const courses = await getStudentCourses()
+        const courses = await getAll()
         setCourses(courses)
     }
 
@@ -30,6 +30,7 @@ export const StudentCoursesPage = () => {
             ) : (
                 <Flex
                     flexWrap={'wrap'}
+                    justifyContent={'flex-start'}
                     gap={20}
                     padding={30}
                     overflowY={'scroll'}
@@ -48,5 +49,3 @@ export const StudentCoursesPage = () => {
         </>
     )
 }
-
-export default StudentCoursesPage
