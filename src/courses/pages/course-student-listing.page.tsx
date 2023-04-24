@@ -1,5 +1,7 @@
 import {
+    Button,
     Flex,
+    Heading,
     Table,
     TableContainer,
     Tbody,
@@ -14,7 +16,7 @@ import { useEffect, useState } from 'react'
 import { Student } from '../../users/model/student.model'
 import { useApplicationStore } from '../../store/application.store'
 import useCourseService from '../services/course.service'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 export const CourseStudentListingPage = () => {
     const { title } = useParams()
@@ -22,7 +24,9 @@ export const CourseStudentListingPage = () => {
     const [students, setStudents] = useState<Student[]>([])
     const spinner = useApplicationStore((state) => state.spinner)
     const setSpinner = useApplicationStore((state) => state.setSpinner)
-    const { getCourseStudents } = useCourseService()
+    const navigate = useNavigate()
+    const { getCourseStudents, exportStudentsToCsv, removeStudentFromCourse } =
+        useCourseService()
 
     const loadStudents = async (page = 1) => {
         setSpinner(true)
@@ -35,6 +39,15 @@ export const CourseStudentListingPage = () => {
         setPage(page)
     }
 
+    const handleStudentRemoved = async (student: Student) => {
+        await removeStudentFromCourse(title ?? '', student.id)
+        await loadPaginated(page)
+    }
+
+    const handleAddStudents = () => {
+        navigate(`/dashboard/courses/${title}/add/students`)
+    }
+
     useEffect(() => {
         loadStudents()
     }, [])
@@ -44,14 +57,41 @@ export const CourseStudentListingPage = () => {
             justifyContent={'center'}
             h={'100%'}
             position={'relative'}
+            direction={'column'}
+            alignItems={'center'}
+            gap={10}
         >
+            <Flex
+                w={'80%'}
+                justifyContent={'space-between'}
+                paddingTop={'40px'}
+            >
+                <Heading as={'h2'} fontSize={'1.5rem'}>
+                    {title}(Students)
+                </Heading>
+                <Flex gap={5}>
+                    <Button
+                        color={'white'}
+                        background={'green'}
+                        onClick={handleAddStudents}
+                    >
+                        Add Students
+                    </Button>
+                    <Button
+                        color={'white'}
+                        background={'green'}
+                        onClick={() => exportStudentsToCsv(title ?? '')}
+                    >
+                        Export to CSV
+                    </Button>
+                </Flex>
+            </Flex>
             <Flex
                 h={'100%'}
                 w={'80%'}
                 direction={'column'}
                 justifyContent={'center'}
                 alignItems={'flex-start'}
-                paddingTop={10}
                 paddingBottom={10}
             >
                 <TableContainer
@@ -74,6 +114,9 @@ export const CourseStudentListingPage = () => {
                                     student={student}
                                     isSelected={false}
                                     onSelectChange={() => void ''}
+                                    onRemove={() =>
+                                        handleStudentRemoved(student)
+                                    }
                                 />
                             ))}
                         </Tbody>

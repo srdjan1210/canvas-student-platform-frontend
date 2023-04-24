@@ -21,8 +21,14 @@ export const CoursePage = () => {
     const layoutType = useApplicationStore((state) => state.boxType)
     const setSpinner = useApplicationStore((state) => state.setSpinner)
     const spinner = useApplicationStore((state) => state.spinner)
-    const { listFiles, getDownloadUrl, createFolder, uploadFile } =
-        useCourseService()
+    const {
+        listFiles,
+        getDownloadUrl,
+        createFolder,
+        uploadFile,
+        deleteFolder,
+        deleteFile,
+    } = useCourseService()
 
     const goBack = () => {
         setSpinner(true)
@@ -46,7 +52,8 @@ export const CoursePage = () => {
 
     const downloadFile = async (filename: string) => {
         const link = await getDownloadUrl(currentFolder, filename)
-        download(link, filename)
+        console.log(link)
+        await download(link, filename)
     }
 
     const createNewFolder = async (folder: string) => {
@@ -60,6 +67,14 @@ export const CoursePage = () => {
         setSpinner(false)
     }
 
+    const onDeleteFolder = async () => {
+        if (currentFolder === name) return
+        setSpinner(true)
+        await deleteFolder(currentFolder)
+        setSpinner(false)
+        goBack()
+    }
+
     const uploadNewFile = async (file: File | null) => {
         if (file != null) {
             setSpinner(true)
@@ -67,6 +82,13 @@ export const CoursePage = () => {
             await listFolderFiles()
             setSpinner(false)
         }
+    }
+
+    const handleDeleteFile = async (filename: string) => {
+        setSpinner(true)
+        await deleteFile(`${currentFolder}/${filename}`)
+        await listFolderFiles()
+        setSpinner(false)
     }
 
     useEffect(() => {
@@ -88,6 +110,7 @@ export const CoursePage = () => {
                 <FileSearchBar
                     path={currentFolder}
                     onCreateFolder={createNewFolder}
+                    onDeleteFolder={onDeleteFolder}
                     onUploadFile={uploadNewFile}
                     course={name ?? ''}
                 />
@@ -106,10 +129,11 @@ export const CoursePage = () => {
                         downloadFile={(file) => downloadFile(file)}
                         goBack={() => goBack()}
                         isFolderRoot={currentFolder === name}
+                        deleteFile={(filename) => handleDeleteFile(filename)}
                     />
                 )}
             </Flex>
-            <SideAnnouncements announcements={announcements} />
+            {/*<SideAnnouncements announcements={announcements} />*/}
             {spinner && (
                 <Flex
                     alignItems={'center'}

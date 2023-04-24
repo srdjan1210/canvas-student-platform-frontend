@@ -1,4 +1,4 @@
-import { Button, Flex, Heading, Input } from '@chakra-ui/react'
+import { Button, Flex, Heading, Input, useDisclosure } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { Student } from '../../users/model/student.model'
 import { StudentDndContainer } from '../components/student-dnd-container.component'
@@ -8,6 +8,9 @@ import { GlobalSpinner } from '../../shared/components/spinner.component'
 import { useParams } from 'react-router-dom'
 import useCourseService from '../services/course.service'
 import { useInfiniteScroll } from '../../shared/utils/infinite-scroll'
+import { StudentsImportModalComponent } from '../components/students-import-modal.component'
+import { UploadFileButton } from '../components/upload-file-button'
+import { toast } from 'react-toastify'
 
 export const CourseTransferStudentsPage = () => {
     const [studentsAttending, setStudentsAttending] = useState<Student[]>([])
@@ -19,13 +22,14 @@ export const CourseTransferStudentsPage = () => {
     const [search, setSearch] = useState('')
     const [page, setPage] = useState(1)
     const [paginationDisabled, setPaginationDisabled] = useState(false)
+    const [parsedStudents, setParsedStudents] = useState<Student[]>([])
+
     const setSpinner = useApplicationStore((state) => state.setSpinner)
     const spinner = useApplicationStore((state) => state.spinner)
     const { getStudentsWithoutGivenCourse } = useStudentService()
-    const { addStudentsToCourse } = useCourseService()
+    const { addStudentsToCourse, importCourseStudents } = useCourseService()
     const { title } = useParams()
     const { onScroll, setLoading } = useInfiniteScroll(async () => {
-        console.log(paginationDisabled)
         if (paginationDisabled) {
             setLoading(false)
             return
@@ -35,6 +39,7 @@ export const CourseTransferStudentsPage = () => {
         setStudentsNotAttending([...studentsNotAttending, ...loaded])
         setLoading(false)
     })
+    const { isOpen, onOpen, onClose } = useDisclosure()
 
     const loadPaginated = async (text: string, page: number) => {
         const students = await getStudentsWithoutGivenCourse(title, text, page)
@@ -94,18 +99,43 @@ export const CourseTransferStudentsPage = () => {
         setLeftDrag(null)
     }
 
+    const importStudentsFromCsv = async (file: File | undefined) => {
+        console.log(file)
+        if (!file) return
+        const students = await importCourseStudents(title ?? '', file)
+        setParsedStudents(students)
+    }
+
     const commit = async () => {
         const ids = studentsAttending.map((student) => student.id)
-        const resp = await addStudentsToCourse(title ?? '', ids)
+        await commitStudents(ids)
+    }
 
+    const commitStudents = async (ids: number[]) => {
+        const resp = await addStudentsToCourse(title ?? '', ids)
         if (!resp.error) {
             setStudentsAttending([])
         }
     }
 
+    const closeModal = async () => {
+        onClose()
+        const ids = parsedStudents.map((student) => student.id)
+        await commitStudents(ids)
+        setParsedStudents([])
+        setStudentsNotAttending([])
+        await loadStudents(search)
+        setPage(1)
+    }
+
     useEffect(() => {
         loadStudents(search)
     }, [])
+
+    useEffect(() => {
+        if (parsedStudents.length == 0) return
+        onOpen()
+    }, [parsedStudents])
 
     return (
         <Flex
@@ -161,6 +191,10 @@ export const CourseTransferStudentsPage = () => {
                         <Heading as={'h1'} fontSize={'1.2rem'}>
                             Students attending!
                         </Heading>
+                        <UploadFileButton
+                            text={'Import from csv!'}
+                            onUpload={(file) => importStudentsFromCsv(file)}
+                        />
                         {studentsAttending.length > 0 && (
                             <Button
                                 onClick={() => commit()}
@@ -185,6 +219,12 @@ export const CourseTransferStudentsPage = () => {
                 </Flex>
             </Flex>
             <GlobalSpinner spinner={spinner} />
+            <StudentsImportModalComponent
+                students={parsedStudents}
+                isOpen={isOpen}
+                onClose={onClose}
+                onConfirm={() => closeModal()}
+            />
         </Flex>
     )
 }

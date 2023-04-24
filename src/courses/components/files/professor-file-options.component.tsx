@@ -9,6 +9,7 @@ import { InputButton } from '../input-button.component'
 
 interface Props {
     onCreateFolder: (folder: string) => void
+    onDeleteFolder: () => void
     onUploadFile: (file: File | null) => void
 }
 type FormValues = {
@@ -17,6 +18,7 @@ type FormValues = {
 export const ProfessorFileOptions = ({
     onCreateFolder,
     onUploadFile,
+    onDeleteFolder,
 }: Props) => {
     const [file, setFile] = useState<File | null>(null)
     const [folder, setFolder] = useState('')
@@ -46,6 +48,16 @@ export const ProfessorFileOptions = ({
                 onChange={(val) => setFolder(val)}
                 onClick={createFolder}
             />
+            <Box>
+                <Button
+                    leftIcon={<BsFillTrashFill size={20} />}
+                    background={'red'}
+                    color={'white'}
+                    onClick={() => onDeleteFolder()}
+                >
+                    Delete folder
+                </Button>
+            </Box>
             {file && (
                 <>
                     <Box>
@@ -61,7 +73,7 @@ export const ProfessorFileOptions = ({
                     <Box>
                         <Button
                             leftIcon={<BsFillTrashFill size={20} />}
-                            background={'green'}
+                            background={'red'}
                             color={'white'}
                             onClick={() => setFile(null)}
                         >

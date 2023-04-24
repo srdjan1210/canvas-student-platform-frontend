@@ -1,9 +1,11 @@
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useApplicationStore } from '../../store/application.store'
 import useCourseService from '../services/course.service'
 import {
+    Button,
     Flex,
+    Heading,
     Table,
     TableContainer,
     Tbody,
@@ -22,7 +24,12 @@ export const CourseProfessorListingPage = () => {
     const [professors, setProfessors] = useState<Professor[]>([])
     const spinner = useApplicationStore((state) => state.spinner)
     const setSpinner = useApplicationStore((state) => state.setSpinner)
-    const { getCourseProfessors } = useCourseService()
+    const navigate = useNavigate()
+    const {
+        getCourseProfessors,
+        exportProfessorsToCsv,
+        removeProfessorFromCourse,
+    } = useCourseService()
 
     const loadProfessors = async (page = 1) => {
         setSpinner(true)
@@ -35,6 +42,15 @@ export const CourseProfessorListingPage = () => {
         setPage(page)
     }
 
+    const handleRemoveProfessor = async (professor: Professor) => {
+        await removeProfessorFromCourse(title ?? '', professor.id)
+        await loadPaginated(page)
+    }
+
+    const handleAddProfessors = () => {
+        navigate(`/dashboard/courses/${title}/add/professors`)
+    }
+
     useEffect(() => {
         loadProfessors()
     }, [])
@@ -44,6 +60,8 @@ export const CourseProfessorListingPage = () => {
             justifyContent={'center'}
             h={'100%'}
             position={'relative'}
+            direction={'column'}
+            alignItems={'center'}
         >
             <Flex
                 h={'100%'}
@@ -51,15 +69,40 @@ export const CourseProfessorListingPage = () => {
                 direction={'column'}
                 justifyContent={'center'}
                 alignItems={'flex-start'}
-                paddingTop={10}
                 paddingBottom={10}
+                gap={10}
             >
-                <TableContainer
+                <Flex
                     w={'100%'}
-                    h={'100%'}
-                    alignItems={'space-between'}
+                    justifyContent={'space-between'}
+                    paddingTop={'40px'}
+                    alignItems={'center'}
                 >
-                    <Table variant={'simple'}>
+                    <Heading as={'h2'} fontSize={'1.5rem'}>
+                        {title}(Professors)
+                    </Heading>
+                    <Flex gap={5}>
+                        <Button
+                            color={'white'}
+                            background={'green'}
+                            onClick={handleAddProfessors}
+                        >
+                            AddProfessors
+                        </Button>
+                        <Button
+                            color={'white'}
+                            background={'green'}
+                            onClick={() => exportProfessorsToCsv(title ?? '')}
+                        >
+                            Export to CSV
+                        </Button>
+                    </Flex>
+                </Flex>
+                <TableContainer w={'100%'} h={'100%'}>
+                    <Table
+                        css={{ 'table-layout': 'fixed', width: 'full' }}
+                        variant={'simple'}
+                    >
                         <Thead>
                             <Tr>
                                 <Th textAlign={'center'}>Name</Th>
@@ -74,6 +117,9 @@ export const CourseProfessorListingPage = () => {
                                     isSelected={false}
                                     onSelectChange={() => {}}
                                     professor={professor}
+                                    onRemove={() =>
+                                        handleRemoveProfessor(professor)
+                                    }
                                 />
                             ))}
                         </Tbody>

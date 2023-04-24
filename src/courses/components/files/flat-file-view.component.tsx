@@ -8,16 +8,22 @@ import {
     AiOutlineFilePdf,
     AiOutlineFilePpt,
 } from 'react-icons/ai'
-import { Flex, Text } from '@chakra-ui/react'
+import { Button, Flex, Text } from '@chakra-ui/react'
 import { IoMdArrowBack } from 'react-icons/io'
+import React, { useState } from 'react'
+import { BsFillTrashFill } from 'react-icons/bs'
+import { useApplicationStore } from '../../../store/application.store'
 
 interface Props {
     filename: string
     type: 'folder' | 'file' | 'back'
     onClick: () => void
+    onDelete: () => void
 }
 
-export const FlatFileView = ({ filename, type, onClick }: Props) => {
+export const FlatFileView = ({ filename, type, onClick, onDelete }: Props) => {
+    const [showOptions, setShowOptions] = useState(false)
+    const authenticated = useApplicationStore((state) => state.user)
     const ICON_SIZE = 60
     const files = addProxyDefaultValue(
         {
@@ -26,8 +32,11 @@ export const FlatFileView = ({ filename, type, onClick }: Props) => {
         },
         <AiOutlineFile size={ICON_SIZE} />
     )
-
     const extension = extractFileExtension(filename)
+
+    const handleClick = (event: React.MouseEvent) => {
+        if (event.currentTarget === event.target) onClick()
+    }
 
     return (
         <Flex
@@ -36,11 +45,15 @@ export const FlatFileView = ({ filename, type, onClick }: Props) => {
             maxH={100}
             minH={100}
             borderBottom={'1px solid lightgray'}
-            onClick={() => onClick()}
+            onClick={handleClick}
             cursor={'pointer'}
             _hover={{
                 background: 'lightgray',
             }}
+            onMouseOver={() => setShowOptions(true)}
+            onMouseLeave={() => setShowOptions(false)}
+            justifyContent={'space-between'}
+            alignItems={'center'}
         >
             <Flex alignItems={'center'}>
                 {type === 'folder' && (
@@ -56,6 +69,18 @@ export const FlatFileView = ({ filename, type, onClick }: Props) => {
                     {filename}
                 </Text>
             </Flex>
+            {showOptions &&
+                type != 'folder' &&
+                authenticated?.role !== 'STUDENT' && (
+                    <Button
+                        background={'red'}
+                        color={'white'}
+                        marginRight={10}
+                        onClick={() => onDelete()}
+                    >
+                        <BsFillTrashFill size={20} />
+                    </Button>
+                )}
         </Flex>
     )
 }

@@ -117,14 +117,6 @@ export const StudentDashboardPage = () => {
                                 <Th textAlign={'center'}>Name</Th>
                                 <Th textAlign={'center'}>Surname</Th>
                                 <Th textAlign={'center'}>Index</Th>
-                                <Th textAlign={'center'}>
-                                    <Checkbox
-                                        isChecked={allSelected}
-                                        onChange={handleAllSelected}
-                                    >
-                                        Select All
-                                    </Checkbox>
-                                </Th>
                             </Tr>
                         </Thead>
                         <Tbody>

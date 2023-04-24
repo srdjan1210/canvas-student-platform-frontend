@@ -6,6 +6,7 @@ interface Props {
     files: CourseFile[]
     goToFolder: (folder: string) => void
     downloadFile: (filename: string) => void
+    deleteFile: (filename: string) => void
     goBack: () => void
     isFolderRoot: boolean
 }
@@ -16,6 +17,7 @@ export const FileListOverview = ({
     goToFolder,
     goBack,
     isFolderRoot,
+    deleteFile,
 }: Props) => {
     const handleClick = (file: CourseFile) => {
         if (file.type === 'folder') {
@@ -24,6 +26,7 @@ export const FileListOverview = ({
         }
         downloadFile(file.filename)
     }
+
     return (
         <Flex
             direction={'column'}
@@ -49,6 +52,7 @@ export const FileListOverview = ({
                     filename={'Go Back'}
                     type={'back'}
                     onClick={() => goBack()}
+                    onDelete={() => {}}
                 />
             )}
             {files.map((file, index) => (
@@ -57,6 +61,7 @@ export const FileListOverview = ({
                     filename={file.filename}
                     type={file.type}
                     onClick={() => handleClick(file)}
+                    onDelete={() => deleteFile(file.filename)}
                 />
             ))}
         </Flex>

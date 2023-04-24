@@ -5,10 +5,13 @@ import { useStudentService } from '../../users/services/student.service'
 import useCourseService from '../services/course.service'
 import { useParams } from 'react-router-dom'
 import { useInfiniteScroll } from '../../shared/utils/infinite-scroll'
-import { Button, Flex, Heading, Input } from '@chakra-ui/react'
+import { Button, Flex, Heading, Input, useDisclosure } from '@chakra-ui/react'
 import { GlobalSpinner } from '../../shared/components/spinner.component'
 import { Professor } from '../../users/model/professor.model'
 import { ProfessorDndContainer } from '../components/professor-dnd-container.component'
+import { UploadFileButton } from '../components/upload-file-button'
+import { ProfessorsImportModalComponent } from '../components/professors-import-modal.component'
+import { toast } from 'react-toastify'
 
 export const CourseTransferProfessorsPage = () => {
     const [professorsMembers, setProfessorsMembers] = useState<Professor[]>([])
@@ -20,10 +23,13 @@ export const CourseTransferProfessorsPage = () => {
     const [search, setSearch] = useState('')
     const [page, setPage] = useState(1)
     const [paginationDisabled, setPaginationDisabled] = useState(false)
+    const [parsedProfessors, setParsedProfessors] = useState<Professor[]>([])
+
     const setSpinner = useApplicationStore((state) => state.setSpinner)
     const spinner = useApplicationStore((state) => state.spinner)
+    const { isOpen, onClose, onOpen } = useDisclosure()
     const { getProfessorsWithGivenCourse } = useStudentService()
-    const { addProfessorsToCourse } = useCourseService()
+    const { addProfessorsToCourse, importCourseProfessors } = useCourseService()
     const { title } = useParams()
     const { onScroll, setLoading } = useInfiniteScroll(async () => {
         if (paginationDisabled) {
@@ -39,7 +45,6 @@ export const CourseTransferProfessorsPage = () => {
     const loadPaginated = async (text: string, page: number) => {
         const professors = await getProfessorsWithGivenCourse(title, text, page)
         if (professors.length == 0) setPaginationDisabled(true)
-        console.log(professors)
         return professors.filter((prof: Professor) =>
             professorsMembers.every((p) => p.id != prof.id)
         )
@@ -55,9 +60,9 @@ export const CourseTransferProfessorsPage = () => {
         setSpinner(false)
     }
 
-    const handleKeyDown = (e: any) => {
+    const handleKeyDown = async (e: any) => {
         if (e.key === 'Enter') {
-            loadProfessors(search)
+            await loadProfessors(search)
             setPage(1)
             setPaginationDisabled(false)
         }
@@ -71,7 +76,7 @@ export const CourseTransferProfessorsPage = () => {
         setProfessorsMembers(
             professorsMembers.filter((p) => p.id != rightDrag.id)
         )
-        setProfessorsMembers([rightDrag, ...professorsMembers])
+        setProfessorsNotMembers([rightDrag, ...professorsNotMembers])
         setRightDrag(null)
     }
 
@@ -96,18 +101,43 @@ export const CourseTransferProfessorsPage = () => {
         setLeftDrag(null)
     }
 
+    const importProfessorsFromCsv = async (file: File | undefined) => {
+        console.log(file)
+        if (!file) return
+        const professors = await importCourseProfessors(title ?? '', file)
+        setParsedProfessors(professors)
+    }
+
     const commit = async () => {
         const ids = professorsMembers.map((professor) => professor.id)
-        const resp = await addProfessorsToCourse(title ?? '', ids)
+        await commitProfessors(ids)
+    }
 
+    const commitProfessors = async (ids: number[]) => {
+        const resp = await addProfessorsToCourse(title ?? '', ids)
         if (!resp.error) {
             setProfessorsMembers([])
         }
     }
 
+    const closeModal = async () => {
+        onClose()
+        const ids = parsedProfessors.map((prof) => prof.id)
+        await commitProfessors(ids)
+        setParsedProfessors([])
+        setProfessorsMembers([])
+        await loadProfessors(search)
+        setPage(1)
+    }
+
     useEffect(() => {
         loadProfessors(search)
     }, [])
+
+    useEffect(() => {
+        if (parsedProfessors.length == 0) return
+        onOpen()
+    }, [parsedProfessors])
 
     return (
         <Flex
@@ -163,6 +193,11 @@ export const CourseTransferProfessorsPage = () => {
                         <Heading as={'h1'} fontSize={'1.2rem'}>
                             Professors members!
                         </Heading>
+                        <UploadFileButton
+                            text={'Import from csv!'}
+                            onUpload={(file) => importProfessorsFromCsv(file)}
+                        />
+
                         {professorsMembers.length > 0 && (
                             <Button
                                 onClick={() => commit()}
@@ -187,6 +222,12 @@ export const CourseTransferProfessorsPage = () => {
                 </Flex>
             </Flex>
             <GlobalSpinner spinner={spinner} />
+            <ProfessorsImportModalComponent
+                professors={parsedProfessors}
+                isOpen={isOpen}
+                onClose={onClose}
+                onConfirm={() => closeModal()}
+            />
         </Flex>
     )
 }

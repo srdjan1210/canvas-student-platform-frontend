@@ -7,12 +7,14 @@ import { AdminCourseOptions } from '../admin-course.options.component'
 interface Props {
     path?: string
     onCreateFolder: (folder: string) => void
+    onDeleteFolder: () => void
     onUploadFile: (file: File | null) => void
     course: string
 }
 export const FileSearchBar = ({
     path,
     onCreateFolder,
+    onDeleteFolder,
     onUploadFile,
     course,
 }: Props) => {
@@ -54,6 +56,7 @@ export const FileSearchBar = ({
                 <ProfessorFileOptions
                     onCreateFolder={onCreateFolder}
                     onUploadFile={onUploadFile}
+                    onDeleteFolder={onDeleteFolder}
                 />
             )}
             {user?.role === 'ADMINISTRATOR' && (
