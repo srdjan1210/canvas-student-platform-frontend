@@ -8,10 +8,9 @@ import { useInfiniteScroll } from '../../shared/utils/infinite-scroll'
 import { Button, Flex, Heading, Input, useDisclosure } from '@chakra-ui/react'
 import { GlobalSpinner } from '../../shared/components/spinner.component'
 import { Professor } from '../../users/model/professor.model'
-import { ProfessorDndContainer } from '../components/professor-dnd-container.component'
+import { ProfessorDndContainer } from '../components/professors/professor-dnd-container.component'
 import { UploadFileButton } from '../components/upload-file-button'
-import { ProfessorsImportModalComponent } from '../components/professors-import-modal.component'
-import { toast } from 'react-toastify'
+import { ProfessorsImportModalComponent } from '../components/professors/professors-import-modal.component'
 
 export const CourseTransferProfessorsPage = () => {
     const [professorsMembers, setProfessorsMembers] = useState<Professor[]>([])
@@ -164,7 +163,7 @@ export const CourseTransferProfessorsPage = () => {
                         Professors not members!
                     </Heading>
                     <Input
-                        placeholder={'Search students...'}
+                        placeholder={'Search professors...'}
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         onKeyDown={handleKeyDown}
@@ -193,20 +192,24 @@ export const CourseTransferProfessorsPage = () => {
                         <Heading as={'h1'} fontSize={'1.2rem'}>
                             Professors members!
                         </Heading>
-                        <UploadFileButton
-                            text={'Import from csv!'}
-                            onUpload={(file) => importProfessorsFromCsv(file)}
-                        />
+                        <Flex gap={5}>
+                            <UploadFileButton
+                                text={'Import from csv!'}
+                                onUpload={(file) =>
+                                    importProfessorsFromCsv(file)
+                                }
+                            />
 
-                        {professorsMembers.length > 0 && (
-                            <Button
-                                onClick={() => commit()}
-                                background={'green'}
-                                color={'white'}
-                            >
-                                Commit
-                            </Button>
-                        )}
+                            {professorsMembers.length > 0 && (
+                                <Button
+                                    onClick={() => commit()}
+                                    background={'green'}
+                                    color={'white'}
+                                >
+                                    Commit
+                                </Button>
+                            )}
+                        </Flex>
                     </Flex>
                     <ProfessorDndContainer
                         professors={professorsMembers}

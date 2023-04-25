@@ -21,6 +21,7 @@ export const CoursePage = () => {
     const layoutType = useApplicationStore((state) => state.boxType)
     const setSpinner = useApplicationStore((state) => state.setSpinner)
     const spinner = useApplicationStore((state) => state.spinner)
+    const [search, setSearch] = useState('')
     const {
         listFiles,
         getDownloadUrl,
@@ -113,6 +114,8 @@ export const CoursePage = () => {
                     onDeleteFolder={onDeleteFolder}
                     onUploadFile={uploadNewFile}
                     course={name ?? ''}
+                    search={search}
+                    onSearch={(val) => setSearch(val)}
                 />
                 {layoutType === 'grid' ? (
                     <FileBoxOverview
@@ -121,6 +124,7 @@ export const CoursePage = () => {
                         downloadFile={(file) => downloadFile(file)}
                         goBack={() => goBack()}
                         isFolderRoot={currentFolder === name}
+                        search={search}
                     />
                 ) : (
                     <FileListOverview
@@ -130,6 +134,7 @@ export const CoursePage = () => {
                         goBack={() => goBack()}
                         isFolderRoot={currentFolder === name}
                         deleteFile={(filename) => handleDeleteFile(filename)}
+                        search={search}
                     />
                 )}
             </Flex>

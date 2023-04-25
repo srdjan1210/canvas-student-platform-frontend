@@ -22,10 +22,10 @@ export const CourseCard = ({ title, description, onClick }: Props) => {
     return (
         <Flex
             direction={'column'}
-            h={400}
-            w={400}
-            maxH={400}
-            maxW={400}
+            h={350}
+            w={350}
+            maxH={350}
+            maxW={350}
             border={'1px solid lightgray'}
             boxShadow={'md'}
             cursor={'pointer'}

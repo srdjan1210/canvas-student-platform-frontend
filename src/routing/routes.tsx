@@ -1,7 +1,6 @@
 import { RouteObject } from 'react-router-dom'
 import App from '../App'
 import { LoginPage } from '../auth/pages/login.page'
-import { RegistrationPage } from '../auth/pages/registration.page'
 import { Dashboard } from '../dashboad/pages/dashboard.page'
 import StudentCoursesPage from '../courses/pages/student-courses.page'
 import { CoursePage } from '../courses/pages/course.page'
@@ -18,6 +17,7 @@ import { AdminCoursesPage } from '../courses/pages/admin-courses.page'
 import { AdminPage } from '../shared/pages/admin.page'
 import CourseStudentListingPage from '../courses/pages/course-student-listing.page'
 import { CourseProfessorListingPage } from '../courses/pages/course-professor-listing.page'
+import { ProfessorDashboardPage } from '../users/pages/professor-dashboard.page'
 
 export const routes: RouteObject[] = [
     {
@@ -43,6 +43,14 @@ export const routes: RouteObject[] = [
                         element: (
                             <AuthWrapper roles={['ADMINISTRATOR']}>
                                 <StudentDashboardPage />
+                            </AuthWrapper>
+                        ),
+                    },
+                    {
+                        path: 'professors',
+                        element: (
+                            <AuthWrapper roles={['ADMINISTRATOR']}>
+                                <ProfessorDashboardPage />
                             </AuthWrapper>
                         ),
                     },
@@ -129,10 +137,6 @@ export const routes: RouteObject[] = [
                                 ),
                             },
                         ],
-                    },
-                    {
-                        path: 'registration',
-                        element: <RegistrationPage />,
                     },
                 ],
             },

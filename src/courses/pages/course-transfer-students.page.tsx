@@ -1,14 +1,14 @@
 import { Button, Flex, Heading, Input, useDisclosure } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { Student } from '../../users/model/student.model'
-import { StudentDndContainer } from '../components/student-dnd-container.component'
+import { StudentDndContainer } from '../components/students/student-dnd-container.component'
 import { useApplicationStore } from '../../store/application.store'
 import { useStudentService } from '../../users/services/student.service'
 import { GlobalSpinner } from '../../shared/components/spinner.component'
 import { useParams } from 'react-router-dom'
 import useCourseService from '../services/course.service'
 import { useInfiniteScroll } from '../../shared/utils/infinite-scroll'
-import { StudentsImportModalComponent } from '../components/students-import-modal.component'
+import { StudentsImportModalComponent } from '../components/students/students-import-modal.component'
 import { UploadFileButton } from '../components/upload-file-button'
 import { toast } from 'react-toastify'
 
@@ -191,19 +191,21 @@ export const CourseTransferStudentsPage = () => {
                         <Heading as={'h1'} fontSize={'1.2rem'}>
                             Students attending!
                         </Heading>
-                        <UploadFileButton
-                            text={'Import from csv!'}
-                            onUpload={(file) => importStudentsFromCsv(file)}
-                        />
-                        {studentsAttending.length > 0 && (
-                            <Button
-                                onClick={() => commit()}
-                                background={'green'}
-                                color={'white'}
-                            >
-                                Commit
-                            </Button>
-                        )}
+                        <Flex gap={5}>
+                            <UploadFileButton
+                                text={'Import from csv!'}
+                                onUpload={(file) => importStudentsFromCsv(file)}
+                            />
+                            {studentsAttending.length > 0 && (
+                                <Button
+                                    onClick={() => commit()}
+                                    background={'green'}
+                                    color={'white'}
+                                >
+                                    Commit
+                                </Button>
+                            )}
+                        </Flex>
                     </Flex>
                     <StudentDndContainer
                         students={studentsAttending}

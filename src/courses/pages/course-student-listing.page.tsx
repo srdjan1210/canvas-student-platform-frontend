@@ -105,6 +105,7 @@ export const CourseStudentListingPage = () => {
                                 <Th textAlign={'center'}>Name</Th>
                                 <Th textAlign={'center'}>Surname</Th>
                                 <Th textAlign={'center'}>Index</Th>
+                                <Th textAlign={'center'}>Action</Th>
                             </Tr>
                         </Thead>
                         <Tbody>

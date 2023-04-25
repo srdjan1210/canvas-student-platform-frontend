@@ -9,6 +9,7 @@ interface Props {
     deleteFile: (filename: string) => void
     goBack: () => void
     isFolderRoot: boolean
+    search: string
 }
 
 export const FileListOverview = ({
@@ -18,6 +19,7 @@ export const FileListOverview = ({
     goBack,
     isFolderRoot,
     deleteFile,
+    search,
 }: Props) => {
     const handleClick = (file: CourseFile) => {
         if (file.type === 'folder') {
@@ -56,13 +58,17 @@ export const FileListOverview = ({
                 />
             )}
             {files.map((file, index) => (
-                <FlatFileView
-                    key={index}
-                    filename={file.filename}
-                    type={file.type}
-                    onClick={() => handleClick(file)}
-                    onDelete={() => deleteFile(file.filename)}
-                />
+                <>
+                    {file.filename.includes(search) && (
+                        <FlatFileView
+                            key={index}
+                            filename={file.filename}
+                            type={file.type}
+                            onClick={() => handleClick(file)}
+                            onDelete={() => deleteFile(file.filename)}
+                        />
+                    )}
+                </>
             ))}
         </Flex>
     )

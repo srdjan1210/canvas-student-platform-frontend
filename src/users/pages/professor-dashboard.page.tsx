@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Student } from '../model/student.model'
+import { useApplicationStore } from '../../store/application.store'
 import {
     Button,
-    Checkbox,
     Flex,
     Table,
     TableContainer,
@@ -12,19 +12,21 @@ import {
     Tr,
     useDisclosure,
 } from '@chakra-ui/react'
-import StudentTableItem from '../components/student-table-item.component'
 import { useStudentService } from '../services/student.service'
-import { useApplicationStore } from '../../store/application.store'
-import { GlobalSpinner } from '../../shared/components/spinner.component'
 import { SearchAndCommand } from '../components/search-and-command.component'
+import StudentTableItem from '../components/student-table-item.component'
 import { PaginationBar } from '../../shared/components/pagination-bar.component'
+import { GlobalSpinner } from '../../shared/components/spinner.component'
+import { Professor } from '../model/professor.model'
 import {
-    AddStudentModal,
+    AddProfessorModal,
     FormValues,
-} from '../components/add-student.modal.component'
+} from '../components/add-professor-modal.component'
+import ProfessorTableItemComponent from '../components/professor-table-item.component'
+import { useProfessorService } from '../services/professor.service'
 
-export const StudentDashboardPage = () => {
-    const [students, setStudents] = useState<Student[]>([])
+export const ProfessorDashboardPage = () => {
+    const [professors, setProfessors] = useState<Professor[]>([])
     const [search, setSearch] = useState('')
     const [page, setPage] = useState(1)
     const [perPage, setPerPage] = useState(10)
@@ -32,7 +34,7 @@ export const StudentDashboardPage = () => {
     const spinner = useApplicationStore((state) => state.spinner)
     const setSpinner = useApplicationStore((state) => state.setSpinner)
     const { isOpen, onClose, onOpen } = useDisclosure()
-    const { searchStudents, registerStudent } = useStudentService()
+    const { searchProfessors, registerProfessor } = useProfessorService()
 
     const handleSelectChange = (val: number) => {
         const isSelected = selected.some((sel) => sel === val)
@@ -42,48 +44,44 @@ export const StudentDashboardPage = () => {
 
     const loadPaginated = async (page: number) => {
         setSpinner(true)
-        const students = await searchStudents(search, page, perPage)
-        setStudents(students)
+        const professors = await searchProfessors(search, page, perPage)
+        setProfessors(professors)
         setSpinner(false)
         setPage(page)
     }
 
-    const loadSearchedStudents = async () => {
+    const loadSearchedProfessors = async () => {
         setSpinner(true)
-        const students = await searchStudents(search, page, perPage)
-        setStudents(students)
+        const professors = await searchProfessors(search, page, perPage)
+        setProfessors(professors)
         setSpinner(false)
         setPage(1)
     }
 
-    const handleAddStudent = () => {
+    const handleAddProfessor = () => {
         onOpen()
     }
 
     const handleRegister = async ({
         email,
-        specialization,
         name,
         surname,
         password,
-        indexNumber,
-        indexYear,
+        title,
     }: FormValues) => {
         onClose()
-        await registerStudent({
+        await registerProfessor({
             email,
-            specialization,
+            name,
             surname,
             password,
-            indexNumber,
-            year: indexYear,
-            name,
+            title,
         })
         await loadPaginated(page)
     }
 
     useEffect(() => {
-        loadSearchedStudents()
+        loadSearchedProfessors()
     }, [search])
 
     return (
@@ -104,15 +102,15 @@ export const StudentDashboardPage = () => {
             >
                 <SearchAndCommand
                     onChange={(text) => setSearch(text)}
-                    placeholder={'Search students by name, surname or index'}
+                    placeholder={'Search professors by name, surname or title'}
                     showCommands={true}
                 >
                     <Button
                         background={'green'}
                         color={'white'}
-                        onClick={handleAddStudent}
+                        onClick={handleAddProfessor}
                     >
-                        Add Student
+                        Add Professor
                     </Button>
                 </SearchAndCommand>
 
@@ -126,19 +124,19 @@ export const StudentDashboardPage = () => {
                             <Tr>
                                 <Th textAlign={'center'}>Name</Th>
                                 <Th textAlign={'center'}>Surname</Th>
-                                <Th textAlign={'center'}>Index</Th>
+                                <Th textAlign={'center'}>Title</Th>
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {students.map((student) => (
-                                <StudentTableItem
-                                    key={student.id}
-                                    student={student}
+                            {professors.map((professor) => (
+                                <ProfessorTableItemComponent
+                                    key={professor.id}
+                                    professor={professor}
                                     isSelected={selected.some(
-                                        (sel) => sel === student.id
+                                        (sel) => sel === professor.id
                                     )}
                                     onSelectChange={() =>
-                                        handleSelectChange(student.id)
+                                        handleSelectChange(professor.id)
                                     }
                                 />
                             ))}
@@ -147,13 +145,13 @@ export const StudentDashboardPage = () => {
                 </TableContainer>
                 <PaginationBar
                     previousDisabled={page <= 1}
-                    nextDisabled={students.length == 0}
+                    nextDisabled={professors.length == 0}
                     onPrevious={() => loadPaginated(page - 1)}
                     onNext={() => loadPaginated(page + 1)}
                 />
             </Flex>
             <GlobalSpinner spinner={spinner} />
-            <AddStudentModal
+            <AddProfessorModal
                 isOpen={isOpen}
                 onClose={onClose}
                 onRegister={handleRegister}

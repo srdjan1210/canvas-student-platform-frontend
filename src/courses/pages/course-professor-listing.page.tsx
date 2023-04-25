@@ -108,6 +108,7 @@ export const CourseProfessorListingPage = () => {
                                 <Th textAlign={'center'}>Name</Th>
                                 <Th textAlign={'center'}>Surname</Th>
                                 <Th textAlign={'center'}>Title</Th>
+                                <Th textAlign={'center'}>Action</Th>
                             </Tr>
                         </Thead>
                         <Tbody>

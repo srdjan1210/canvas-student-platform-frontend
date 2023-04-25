@@ -71,6 +71,7 @@ export const FlatFileView = ({ filename, type, onClick, onDelete }: Props) => {
             </Flex>
             {showOptions &&
                 type != 'folder' &&
+                type != 'back' &&
                 authenticated?.role !== 'STUDENT' && (
                     <Button
                         background={'red'}

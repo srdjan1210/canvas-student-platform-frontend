@@ -1,4 +1,4 @@
-import { Student } from '../../users/model/student.model'
+import { Student } from '../../../users/model/student.model'
 import {
     Box,
     Button,
@@ -9,23 +9,24 @@ import {
     Input,
 } from '@chakra-ui/react'
 import { useEffect, useRef, useState } from 'react'
-import { PaginationBar } from '../../shared/components/pagination-bar.component'
-import { useApplicationStore } from '../../store/application.store'
+import { PaginationBar } from '../../../shared/components/pagination-bar.component'
+import { useApplicationStore } from '../../../store/application.store'
+import { Professor } from '../../../users/model/professor.model'
 
 export interface Props {
-    onDragging: (student: Student) => void
+    onDragging: (professor: Professor) => void
     onDrop: () => void
     onDraggingEnd: () => void
-    dragged: Student | null
-    students: Student[]
+    dragged: Professor | null
+    professors: Professor[]
 }
 
-export const StudentDndContainer = ({
+export const ProfessorDndContainer = ({
     onDragging,
     onDrop,
     dragged,
     onDraggingEnd,
-    students,
+    professors,
     ...props
 }: Props & FlexProps) => {
     return (
@@ -53,12 +54,12 @@ export const StudentDndContainer = ({
             }}
             {...props}
         >
-            {students.map((student) => (
+            {professors.map((professor) => (
                 <Flex
-                    onDragStart={() => onDragging(student)}
+                    onDragStart={() => onDragging(professor)}
                     onDragEnd={() => onDraggingEnd()}
                     draggable={true}
-                    key={student.id}
+                    key={professor.id}
                     border={'1px solid lightgray'}
                     h={100}
                     minH={100}
@@ -69,13 +70,13 @@ export const StudentDndContainer = ({
                     _hover={{ background: 'gray' }}
                 >
                     <Heading as={'h2'} fontSize={'1.5rem'}>
-                        {student.name}
+                        {professor.name}
                     </Heading>
                     <Heading as={'h2'} fontSize={'1.5rem'}>
-                        {student.surname}
+                        {professor.surname}
                     </Heading>
                     <Heading as={'h2'} fontSize={'1.5rem'}>
-                        {student.fullIndex}
+                        {professor.title}
                     </Heading>
                 </Flex>
             ))}

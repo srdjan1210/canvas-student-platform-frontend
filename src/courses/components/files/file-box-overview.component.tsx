@@ -8,6 +8,7 @@ interface Props {
     downloadFile: (filename: string) => void
     goBack: () => void
     isFolderRoot: boolean
+    search: string
 }
 
 export const FileBoxOverview = ({
@@ -16,6 +17,7 @@ export const FileBoxOverview = ({
     downloadFile,
     goBack,
     isFolderRoot,
+    search,
 }: Props) => {
     const handleClick = (file: CourseFile) => {
         if (file.type === 'folder') {
@@ -54,12 +56,16 @@ export const FileBoxOverview = ({
                 />
             )}
             {files.map((file, index) => (
-                <FileView
-                    key={index}
-                    filename={file.filename}
-                    type={file.type}
-                    onClick={() => handleClick(file)}
-                />
+                <>
+                    {file.filename.includes(search) && (
+                        <FileView
+                            key={index}
+                            filename={file.filename}
+                            type={file.type}
+                            onClick={() => handleClick(file)}
+                        />
+                    )}
+                </>
             ))}
         </Flex>
     )

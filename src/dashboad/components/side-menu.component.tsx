@@ -31,16 +31,6 @@ export const SideMenu = () => {
             padding={'30px 0'}
             gap={10}
         >
-            {user?.role === 'ADMINISTRATOR' && (
-                <SideMenuItem
-                    tooltip={'Create profile'}
-                    link={'/dashboard/registration'}
-                    icon={
-                        <IoMdCreate color="white" size={40} cursor="pointer" />
-                    }
-                />
-            )}
-
             {user?.role === 'STUDENT' && (
                 <SideMenuItem
                     tooltip={'Courses'}
@@ -85,6 +75,19 @@ export const SideMenu = () => {
                 <SideMenuItem
                     tooltip={'Students'}
                     link={'/dashboard/students'}
+                    icon={
+                        <MdOutlineAccountCircle
+                            color="white"
+                            size={40}
+                            cursor="pointer"
+                        />
+                    }
+                />
+            )}
+            {user?.role === 'ADMINISTRATOR' && (
+                <SideMenuItem
+                    tooltip={'Professors'}
+                    link={'/dashboard/professors'}
                     icon={
                         <MdOutlineAccountCircle
                             color="white"

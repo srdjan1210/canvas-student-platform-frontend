@@ -1,4 +1,3 @@
-import { Student } from '../../users/model/student.model'
 import {
     Button,
     Flex,
@@ -9,15 +8,16 @@ import {
     ModalFooter,
     ModalOverlay,
 } from '@chakra-ui/react'
+import { Professor } from '../../../users/model/professor.model'
 
 interface Props {
-    students: Student[]
+    professors: Professor[]
     isOpen: boolean
     onClose: () => void
     onConfirm: () => void
 }
-export const StudentsImportModalComponent = ({
-    students,
+export const ProfessorsImportModalComponent = ({
+    professors,
     isOpen,
     onClose,
     onConfirm,
@@ -25,12 +25,16 @@ export const StudentsImportModalComponent = ({
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
-            <ModalContent>
+            <ModalContent w={'80%'} h={'80%'}>
                 <ModalCloseButton />
-                <ModalBody>
-                    {students.map((student) => (
-                        <Flex key={student.id}>
-                            {`${student.name} ${student.surname} ${student.fullIndex}`}
+                <ModalBody overflowY={'scroll'}>
+                    {professors.map((professor) => (
+                        <Flex
+                            key={professor.id}
+                            alignItems={'center'}
+                            justifyContent={'center'}
+                        >
+                            {`${professor.name} ${professor.surname} ${professor.title}`}
                         </Flex>
                     ))}
                 </ModalBody>

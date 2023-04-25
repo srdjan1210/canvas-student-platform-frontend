@@ -1,5 +1,6 @@
 import { useAxios } from '../../shared/services/axios-instance'
 import { toast } from 'react-toastify'
+import { StudentRegistration } from '../types/student-registration.type'
 
 export const useStudentService = () => {
     const { axios } = useAxios()
@@ -68,9 +69,20 @@ export const useStudentService = () => {
         }
     }
 
+    const registerStudent = async (data: StudentRegistration) => {
+        try {
+            await axios.post('/auth/register/student', data)
+            toast.success('Successfully registered student!')
+        } catch (e: any) {
+            console.log(e)
+            toast.error(e.response.message)
+        }
+    }
+
     return {
         searchStudents,
         getStudentsWithoutGivenCourse,
         getProfessorsWithGivenCourse,
+        registerStudent,
     }
 }
