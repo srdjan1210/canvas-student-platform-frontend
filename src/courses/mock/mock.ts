@@ -1,6 +1,6 @@
-import { Announcement } from '../model/announcement.model'
 import { CourseFile } from '../model/course-file.model'
 import { Student } from '../../users/model/student.model'
+import { Announcement } from '../../announcements/model/announcement.model'
 
 export const ANNOUNCEMENTS_MOCK: Announcement[] = [
     {
@@ -9,6 +9,7 @@ export const ANNOUNCEMENTS_MOCK: Announcement[] = [
         body: 'Zdravo svima!\n Popravni kolokvijum ce se odrzati u terminu vjezbi 27.1.2029',
         professorName: 'Nikola',
         professorSurname: 'Luburic',
+        createdAt: new Date(),
     },
     {
         id: 2,
@@ -16,6 +17,7 @@ export const ANNOUNCEMENTS_MOCK: Announcement[] = [
         body: 'Zdravo svima!\n Popravni kolokvijum ce se odrzati u terminu vjezbi 27.1.2029',
         professorName: 'Nikola',
         professorSurname: 'Luburic',
+        createdAt: new Date(),
     },
     {
         id: 3,
@@ -25,6 +27,7 @@ export const ANNOUNCEMENTS_MOCK: Announcement[] = [
             'Zdravo svima!\n Popravni kolokvijum ce se odrzati u terminu vjezbi 27.1.2029',
         professorName: 'Nikola',
         professorSurname: 'Luburic',
+        createdAt: new Date(),
     },
     {
         id: 4,
@@ -34,6 +37,7 @@ export const ANNOUNCEMENTS_MOCK: Announcement[] = [
             'Zdravo svima!\n Popravni kolokvijum ce se odrzati u terminu vjezbi 27.1.2029',
         professorName: 'Nikola',
         professorSurname: 'Luburic',
+        createdAt: new Date(),
     },
     {
         id: 5,
@@ -43,6 +47,7 @@ export const ANNOUNCEMENTS_MOCK: Announcement[] = [
             'Zdravo svima!\n Popravni kolokvijum ce se odrzati u terminu vjezbi 27.1.2029',
         professorName: 'Nikola',
         professorSurname: 'Luburic',
+        createdAt: new Date(),
     },
     {
         id: 6,
@@ -52,6 +57,7 @@ export const ANNOUNCEMENTS_MOCK: Announcement[] = [
             'Zdravo svima!\n Popravni kolokvijum ce se odrzati u terminu vjezbi 27.1.2029',
         professorName: 'Nikola',
         professorSurname: 'Luburic',
+        createdAt: new Date(),
     },
     {
         id: 7,
@@ -61,6 +67,7 @@ export const ANNOUNCEMENTS_MOCK: Announcement[] = [
             'Zdravo svima!\n Popravni kolokvijum ce se odrzati u terminu vjezbi 27.1.2029',
         professorName: 'Nikola',
         professorSurname: 'Luburic',
+        createdAt: new Date(),
     },
 ]
 

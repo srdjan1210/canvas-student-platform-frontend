@@ -1,11 +1,9 @@
 import { Flex, Spacer } from '@chakra-ui/react'
 import { SideMenuItem } from './side-menu-item.component'
 import { FiLogOut } from 'react-icons/fi'
-import { IoMdCreate } from 'react-icons/io'
 import { MdOutlineAccountCircle, MdOutlinePlayLesson } from 'react-icons/md'
 import { SideMenuProfileItem } from './side-menu-profile-item'
 import { useApplicationStore } from '../../store/application.store'
-import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 export const SideMenu = () => {
@@ -16,10 +14,6 @@ export const SideMenu = () => {
         logout()
         navigate('/login')
     }
-
-    useEffect(() => {
-        console.log(user)
-    }, [user])
 
     return (
         <Flex

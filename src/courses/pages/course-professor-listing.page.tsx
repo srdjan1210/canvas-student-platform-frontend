@@ -1,7 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useApplicationStore } from '../../store/application.store'
-import useCourseService from '../services/course.service'
 import {
     Button,
     Flex,
@@ -14,22 +13,21 @@ import {
     Tr,
 } from '@chakra-ui/react'
 import { PaginationBar } from '../../shared/components/pagination-bar.component'
-import { GlobalSpinner } from '../../shared/components/spinner.component'
 import { Professor } from '../../users/model/professor.model'
 import ProfessorTableItemComponent from '../../users/components/professor-table-item.component'
+import { useGetCourseProfessors } from '../../api/courses/useGetCourseProfessors'
+import { useExportProfessorsToCsv } from '../../api/courses/useExportProfessorsToCsv'
+import { useRemoveProfessorFromCourse } from '../../api/courses/useRemoveProfessorFromCourse'
 
 export const CourseProfessorListingPage = () => {
     const { title } = useParams()
     const [page, setPage] = useState(1)
     const [professors, setProfessors] = useState<Professor[]>([])
-    const spinner = useApplicationStore((state) => state.spinner)
     const setSpinner = useApplicationStore((state) => state.setSpinner)
     const navigate = useNavigate()
-    const {
-        getCourseProfessors,
-        exportProfessorsToCsv,
-        removeProfessorFromCourse,
-    } = useCourseService()
+    const { getCourseProfessors } = useGetCourseProfessors()
+    const { exportProfessorsToCsv } = useExportProfessorsToCsv()
+    const { removeProfessorFromCourse } = useRemoveProfessorFromCourse()
 
     const loadProfessors = async (page = 1) => {
         setSpinner(true)
@@ -133,7 +131,6 @@ export const CourseProfessorListingPage = () => {
                     onNext={() => loadPaginated(page + 1)}
                 />
             </Flex>
-            <GlobalSpinner spinner={spinner} />
         </Flex>
     )
 }

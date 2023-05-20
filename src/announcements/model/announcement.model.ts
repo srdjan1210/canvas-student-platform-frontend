@@ -4,4 +4,6 @@ export type Announcement = {
     professorSurname: string
     title: string
     body: string
+    createdAt: Date
+    avatar?: string
 }

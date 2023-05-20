@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react'
 import { Course } from '../model/course.model'
 import { useNavigate } from 'react-router-dom'
-import useCourseService from '../services/course.service'
 import { NoCourses } from '../components/no-courses.component'
 import { Flex } from '@chakra-ui/react'
 import CourseCard from '../components/course-card.component'
+import { useGetAllCourses } from '../../api/courses/useGetAllCourses'
 
 export const AdminCoursesPage = () => {
     const [courses, setCourses] = useState<Course[]>([])
     const navigate = useNavigate()
-    const { getAll } = useCourseService()
+    const { getAllCourses } = useGetAllCourses()
     const loadCourses = async () => {
-        const courses = await getAll()
+        const courses = await getAllCourses()
         setCourses(courses)
     }
 

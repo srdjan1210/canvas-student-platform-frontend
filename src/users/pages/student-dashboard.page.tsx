@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { Student } from '../model/student.model'
 import {
     Button,
-    Checkbox,
     Flex,
     Table,
     TableContainer,
@@ -13,15 +12,15 @@ import {
     useDisclosure,
 } from '@chakra-ui/react'
 import StudentTableItem from '../components/student-table-item.component'
-import { useStudentService } from '../services/student.service'
 import { useApplicationStore } from '../../store/application.store'
-import { GlobalSpinner } from '../../shared/components/spinner.component'
 import { SearchAndCommand } from '../components/search-and-command.component'
 import { PaginationBar } from '../../shared/components/pagination-bar.component'
 import {
     AddStudentModal,
     FormValues,
 } from '../components/add-student.modal.component'
+import { useSearchStudents } from '../../api/specialization/useSearchStudents'
+import { useRegisterStudent } from '../../api/specialization/useRegisterStudent'
 
 export const StudentDashboardPage = () => {
     const [students, setStudents] = useState<Student[]>([])
@@ -32,7 +31,8 @@ export const StudentDashboardPage = () => {
     const spinner = useApplicationStore((state) => state.spinner)
     const setSpinner = useApplicationStore((state) => state.setSpinner)
     const { isOpen, onClose, onOpen } = useDisclosure()
-    const { searchStudents, registerStudent } = useStudentService()
+    const { searchStudents } = useSearchStudents()
+    const { registerStudent } = useRegisterStudent()
 
     const handleSelectChange = (val: number) => {
         const isSelected = selected.some((sel) => sel === val)
@@ -152,7 +152,6 @@ export const StudentDashboardPage = () => {
                     onNext={() => loadPaginated(page + 1)}
                 />
             </Flex>
-            <GlobalSpinner spinner={spinner} />
             <AddStudentModal
                 isOpen={isOpen}
                 onClose={onClose}

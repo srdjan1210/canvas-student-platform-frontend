@@ -97,8 +97,6 @@ export const AddStudentModal = ({ isOpen, onClose, onRegister }: Props) => {
                                     {errors.name?.message}
                                 </FormErrorMessage>
                             </FormControl>
-                        </Stack>
-                        <Stack spacing={6} w={400}>
                             <FormControl
                                 isInvalid={errors.surname !== undefined}
                             >
@@ -108,7 +106,8 @@ export const AddStudentModal = ({ isOpen, onClose, onRegister }: Props) => {
                                     {errors.surname?.message}
                                 </FormErrorMessage>
                             </FormControl>
-
+                        </Stack>
+                        <Stack spacing={6} w={400}>
                             <FormControl
                                 isInvalid={errors.specialization !== undefined}
                             >

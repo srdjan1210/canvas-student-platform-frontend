@@ -1,17 +1,4 @@
-import {
-    Flex,
-    Text,
-    Image,
-    Tooltip,
-    MenuItem,
-    MenuGroup,
-    MenuDivider,
-    MenuList,
-    Button,
-    MenuButton,
-    Menu,
-} from '@chakra-ui/react'
-import { HiOutlineDotsVertical } from 'react-icons/hi'
+import { Flex, Text, Image, Tooltip } from '@chakra-ui/react'
 
 export interface Props {
     description: string

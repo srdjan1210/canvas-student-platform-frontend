@@ -15,6 +15,7 @@ import { LOGIN_VALIDATION_SCHEMA } from '../auth.constants'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { Simulate } from 'react-dom/test-utils'
 
 interface FormValues {
     email: string
@@ -57,12 +58,20 @@ export const LoginPage = () => {
         toast.error('Invalid credentials')
     }
 
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        console.log(e.key)
+        if (e.key == 'Enter') {
+            handleSubmit(login)()
+        }
+    }
+
     return (
         <Flex
             alignItems={'center'}
             justifyContent={'center'}
             w={'100%'}
             h={'100%'}
+            onKeyDown={handleKeyDown}
         >
             <Flex
                 className="outer-container"

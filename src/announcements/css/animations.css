@@ -1,0 +1,22 @@
+/*.typing-animation {*/
+/*    border: 1px solid black;*/
+/*    padding: 10px;*/
+/*    overflow: hidden;*/
+/*}*/
+
+/*.typing-animation p {*/
+/*    display: inline-block;*/
+/*    margin: 0 0 10px 0;*/
+/*    white-space: nowrap;*/
+/*    overflow: hidden;*/
+/*    animation: typing 0.5s steps(30) 1s forwards;*/
+/*}*/
+
+/*@keyframes typing {*/
+/*    from {*/
+/*        width: 0;*/
+/*    }*/
+/*    to {*/
+/*        width: 100%;*/
+/*    }*/
+/*}*/

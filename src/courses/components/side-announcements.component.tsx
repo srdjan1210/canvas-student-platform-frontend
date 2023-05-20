@@ -1,6 +1,6 @@
-import { Announcement } from '../model/announcement.model'
 import { Box, Flex, Heading } from '@chakra-ui/react'
-import { AnnouncementView } from './announcement-view.component'
+import { AnnouncementView } from '../../announcements/components/announcement-view.component'
+import { Announcement } from '../../announcements/model/announcement.model'
 
 interface Props {
     announcements: Announcement[]

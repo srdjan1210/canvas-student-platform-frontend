@@ -4,12 +4,12 @@ import { Course } from '../model/course.model'
 import CourseCard from '../components/course-card.component'
 import { NoCourses } from '../components/no-courses.component'
 import { useNavigate } from 'react-router-dom'
-import useCourseService from '../services/course.service'
+import { useGetStudentCourses } from '../../api/courses/useGetStudentCourses'
 
 export const StudentCoursesPage = () => {
     const [courses, setCourses] = useState<Course[]>([])
     const navigate = useNavigate()
-    const { getStudentCourses } = useCourseService()
+    const { getStudentCourses } = useGetStudentCourses()
     const loadCourses = async () => {
         const courses = await getStudentCourses()
         setCourses(courses)

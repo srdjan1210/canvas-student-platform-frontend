@@ -86,8 +86,6 @@ export const AddProfessorModal = ({ isOpen, onClose, onRegister }: Props) => {
                                     {errors.password?.message}
                                 </FormErrorMessage>
                             </FormControl>
-                        </Stack>
-                        <Stack spacing={6} w={400}>
                             <FormControl isInvalid={errors.name !== undefined}>
                                 <FormLabel>Name</FormLabel>
                                 <Input size={'lg'} {...register('name')} />
@@ -95,6 +93,8 @@ export const AddProfessorModal = ({ isOpen, onClose, onRegister }: Props) => {
                                     {errors.name?.message}
                                 </FormErrorMessage>
                             </FormControl>
+                        </Stack>
+                        <Stack spacing={6} w={400}>
                             <FormControl
                                 isInvalid={errors.surname !== undefined}
                             >

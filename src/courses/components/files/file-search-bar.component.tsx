@@ -47,6 +47,7 @@ export const FileSearchBar = ({
                         user?.role === 'PROFESSOR' ? 'static' : 'absolute'
                     }
                     left={'0'}
+                    minW={200}
                     maxW={200}
                     overflow={'hidden'}
                     textOverflow={'ellipsis'}

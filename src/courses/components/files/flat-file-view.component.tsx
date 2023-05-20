@@ -8,7 +8,7 @@ import {
     AiOutlineFilePdf,
     AiOutlineFilePpt,
 } from 'react-icons/ai'
-import { Button, Flex, Text } from '@chakra-ui/react'
+import { Button, Flex, Text, Tooltip } from '@chakra-ui/react'
 import { IoMdArrowBack } from 'react-icons/io'
 import React, { useState } from 'react'
 import { BsFillTrashFill } from 'react-icons/bs'

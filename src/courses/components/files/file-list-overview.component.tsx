@@ -1,6 +1,8 @@
 import { CourseFile } from '../../model/course-file.model'
 import { Flex } from '@chakra-ui/react'
 import FlatFileView from './flat-file-view.component'
+import { NoFiles } from './no-files.component'
+import React from 'react'
 
 interface Props {
     files: CourseFile[]
@@ -33,6 +35,7 @@ export const FileListOverview = ({
         <Flex
             direction={'column'}
             overflowY={'scroll'}
+            h={'100%'}
             css={{
                 '&::-webkit-scrollbar': {
                     width: '4px',
@@ -57,19 +60,22 @@ export const FileListOverview = ({
                     onDelete={() => {}}
                 />
             )}
-            {files.map((file, index) => (
-                <>
-                    {file.filename.includes(search) && (
-                        <FlatFileView
-                            key={index}
-                            filename={file.filename}
-                            type={file.type}
-                            onClick={() => handleClick(file)}
-                            onDelete={() => deleteFile(file.filename)}
-                        />
-                    )}
-                </>
-            ))}
+            {files.length == 0 ? (
+                <NoFiles />
+            ) : (
+                files.map((file, index) => (
+                    <React.Fragment key={index}>
+                        {file.filename.includes(search) && (
+                            <FlatFileView
+                                filename={file.filename}
+                                type={file.type}
+                                onClick={() => handleClick(file)}
+                                onDelete={() => deleteFile(file.filename)}
+                            />
+                        )}
+                    </React.Fragment>
+                ))
+            )}
         </Flex>
     )
 }

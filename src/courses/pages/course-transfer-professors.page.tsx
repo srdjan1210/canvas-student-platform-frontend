@@ -1,16 +1,15 @@
 import { useEffect, useState } from 'react'
-import { Student } from '../../users/model/student.model'
 import { useApplicationStore } from '../../store/application.store'
-import { useStudentService } from '../../users/services/student.service'
-import useCourseService from '../services/course.service'
 import { useParams } from 'react-router-dom'
 import { useInfiniteScroll } from '../../shared/utils/infinite-scroll'
 import { Button, Flex, Heading, Input, useDisclosure } from '@chakra-ui/react'
-import { GlobalSpinner } from '../../shared/components/spinner.component'
 import { Professor } from '../../users/model/professor.model'
 import { ProfessorDndContainer } from '../components/professors/professor-dnd-container.component'
 import { UploadFileButton } from '../components/upload-file-button'
 import { ProfessorsImportModalComponent } from '../components/professors/professors-import-modal.component'
+import { useGetProfessorsWithGivenCourse } from '../../api/specialization/useGetProfessorsWithGivenCourse'
+import { useAddProfessorToCourse } from '../../api/courses/useAddProfessorToCourse'
+import { useImportCourseProfessors } from '../../api/courses/useImportCourseProfessors'
 
 export const CourseTransferProfessorsPage = () => {
     const [professorsMembers, setProfessorsMembers] = useState<Professor[]>([])
@@ -23,12 +22,11 @@ export const CourseTransferProfessorsPage = () => {
     const [page, setPage] = useState(1)
     const [paginationDisabled, setPaginationDisabled] = useState(false)
     const [parsedProfessors, setParsedProfessors] = useState<Professor[]>([])
-
     const setSpinner = useApplicationStore((state) => state.setSpinner)
-    const spinner = useApplicationStore((state) => state.spinner)
+    const { getProfessorsWithGivenCourse } = useGetProfessorsWithGivenCourse()
+    const { addProfessorsToCourse } = useAddProfessorToCourse()
+    const { importCourseProfessors } = useImportCourseProfessors()
     const { isOpen, onClose, onOpen } = useDisclosure()
-    const { getProfessorsWithGivenCourse } = useStudentService()
-    const { addProfessorsToCourse, importCourseProfessors } = useCourseService()
     const { title } = useParams()
     const { onScroll, setLoading } = useInfiniteScroll(async () => {
         if (paginationDisabled) {
@@ -224,7 +222,6 @@ export const CourseTransferProfessorsPage = () => {
                     />
                 </Flex>
             </Flex>
-            <GlobalSpinner spinner={spinner} />
             <ProfessorsImportModalComponent
                 professors={parsedProfessors}
                 isOpen={isOpen}

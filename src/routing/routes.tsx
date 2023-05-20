@@ -18,6 +18,8 @@ import { AdminPage } from '../shared/pages/admin.page'
 import CourseStudentListingPage from '../courses/pages/course-student-listing.page'
 import { CourseProfessorListingPage } from '../courses/pages/course-professor-listing.page'
 import { ProfessorDashboardPage } from '../users/pages/professor-dashboard.page'
+import { AnnouncementPage } from '../announcements/pages/announcement.page'
+import { CreateAnnouncementPage } from '../announcements/pages/create-announcement.page'
 
 export const routes: RouteObject[] = [
     {
@@ -133,6 +135,34 @@ export const routes: RouteObject[] = [
                                 element: (
                                     <AuthWrapper roles={['ADMINISTRATOR']}>
                                         <CourseProfessorListingPage />
+                                    </AuthWrapper>
+                                ),
+                            },
+                            {
+                                path: ':title/announcements/:announcementId',
+                                element: (
+                                    <AuthWrapper
+                                        roles={[
+                                            'ADMINISTRATOR',
+                                            'PROFESSOR',
+                                            'STUDENT',
+                                        ]}
+                                    >
+                                        <AnnouncementPage />
+                                    </AuthWrapper>
+                                ),
+                            },
+                            {
+                                path: ':course/create/announcement',
+                                element: (
+                                    <AuthWrapper
+                                        roles={[
+                                            'ADMINISTRATOR',
+                                            'PROFESSOR',
+                                            'STUDENT',
+                                        ]}
+                                    >
+                                        <CreateAnnouncementPage />
                                     </AuthWrapper>
                                 ),
                             },

@@ -1,5 +1,5 @@
-import { Announcement } from '../model/announcement.model'
 import { Flex, Text } from '@chakra-ui/react'
+import { Announcement } from '../model/announcement.model'
 
 interface Props {
     announcement: Announcement

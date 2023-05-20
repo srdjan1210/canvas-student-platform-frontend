@@ -1,6 +1,8 @@
 import { CourseFile } from '../../model/course-file.model'
 import { Flex } from '@chakra-ui/react'
 import FileView from './file-view.component'
+import { NoFiles } from './no-files.component'
+import React from 'react'
 
 interface Props {
     files: CourseFile[]
@@ -32,6 +34,7 @@ export const FileBoxOverview = ({
             flexWrap={'wrap'}
             gap={20}
             overflowY={'scroll'}
+            h={'100%'}
             css={{
                 '&::-webkit-scrollbar': {
                     width: '4px',
@@ -55,18 +58,21 @@ export const FileBoxOverview = ({
                     onClick={() => goBack()}
                 />
             )}
-            {files.map((file, index) => (
-                <>
-                    {file.filename.includes(search) && (
-                        <FileView
-                            key={index}
-                            filename={file.filename}
-                            type={file.type}
-                            onClick={() => handleClick(file)}
-                        />
-                    )}
-                </>
-            ))}
+            {files.length == 0 ? (
+                <NoFiles />
+            ) : (
+                files.map((file, index) => (
+                    <React.Fragment key={index}>
+                        {file.filename.includes(search) && (
+                            <FileView
+                                filename={file.filename}
+                                type={file.type}
+                                onClick={() => handleClick(file)}
+                            />
+                        )}
+                    </React.Fragment>
+                ))
+            )}
         </Flex>
     )
 }

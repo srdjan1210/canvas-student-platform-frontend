@@ -1,4 +1,4 @@
-import { Flex, Text } from '@chakra-ui/react'
+import { Flex, Text, Tooltip } from '@chakra-ui/react'
 import {
     AiOutlineFile,
     AiOutlineFilePdf,
@@ -49,14 +49,16 @@ export const FileView = ({ filename, type, onClick }: Props) => {
                 {type === 'file' && files[extension]}
                 {type === 'back' && <IoMdArrowBack size={'100%'} />}
             </Flex>
-            <Text
-                fontSize={'1.2em'}
-                fontWeight={'bold'}
-                textAlign={'center'}
-                flex={1}
-            >
-                {filename}
-            </Text>
+            <Tooltip label={filename}>
+                <Text
+                    fontSize={'1.2em'}
+                    fontWeight={'bold'}
+                    textAlign={'center'}
+                    flex={1}
+                >
+                    {filename}
+                </Text>
+            </Tooltip>
         </Flex>
     )
 }

@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { Student } from '../model/student.model'
 import { useApplicationStore } from '../../store/application.store'
 import {
     Button,
@@ -12,18 +11,16 @@ import {
     Tr,
     useDisclosure,
 } from '@chakra-ui/react'
-import { useStudentService } from '../services/student.service'
 import { SearchAndCommand } from '../components/search-and-command.component'
-import StudentTableItem from '../components/student-table-item.component'
 import { PaginationBar } from '../../shared/components/pagination-bar.component'
-import { GlobalSpinner } from '../../shared/components/spinner.component'
 import { Professor } from '../model/professor.model'
 import {
     AddProfessorModal,
     FormValues,
 } from '../components/add-professor-modal.component'
 import ProfessorTableItemComponent from '../components/professor-table-item.component'
-import { useProfessorService } from '../services/professor.service'
+import { useSearchProfessors } from '../../api/specialization/useSearchProfessors'
+import { useRegisterProfessor } from '../../api/specialization/useRegisterProfessor'
 
 export const ProfessorDashboardPage = () => {
     const [professors, setProfessors] = useState<Professor[]>([])
@@ -34,7 +31,8 @@ export const ProfessorDashboardPage = () => {
     const spinner = useApplicationStore((state) => state.spinner)
     const setSpinner = useApplicationStore((state) => state.setSpinner)
     const { isOpen, onClose, onOpen } = useDisclosure()
-    const { searchProfessors, registerProfessor } = useProfessorService()
+    const { searchProfessors } = useSearchProfessors()
+    const { registerProfessor } = useRegisterProfessor()
 
     const handleSelectChange = (val: number) => {
         const isSelected = selected.some((sel) => sel === val)
@@ -150,7 +148,6 @@ export const ProfessorDashboardPage = () => {
                     onNext={() => loadPaginated(page + 1)}
                 />
             </Flex>
-            <GlobalSpinner spinner={spinner} />
             <AddProfessorModal
                 isOpen={isOpen}
                 onClose={onClose}

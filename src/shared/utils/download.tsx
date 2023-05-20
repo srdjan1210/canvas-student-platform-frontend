@@ -1,7 +1,6 @@
 import axios from 'axios'
 export const download = async (endpoint: string, fileName: string) => {
     try {
-        console.log(endpoint)
         const response = await axios.get(endpoint, {
             responseType: 'blob',
         })

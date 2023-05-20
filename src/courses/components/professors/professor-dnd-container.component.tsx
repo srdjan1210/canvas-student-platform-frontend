@@ -1,16 +1,4 @@
-import { Student } from '../../../users/model/student.model'
-import {
-    Box,
-    Button,
-    Flex,
-    FlexboxProps,
-    FlexProps,
-    Heading,
-    Input,
-} from '@chakra-ui/react'
-import { useEffect, useRef, useState } from 'react'
-import { PaginationBar } from '../../../shared/components/pagination-bar.component'
-import { useApplicationStore } from '../../../store/application.store'
+import { Flex, FlexProps, Heading } from '@chakra-ui/react'
 import { Professor } from '../../../users/model/professor.model'
 
 export interface Props {

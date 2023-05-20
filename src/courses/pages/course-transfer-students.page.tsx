@@ -3,14 +3,13 @@ import { useEffect, useState } from 'react'
 import { Student } from '../../users/model/student.model'
 import { StudentDndContainer } from '../components/students/student-dnd-container.component'
 import { useApplicationStore } from '../../store/application.store'
-import { useStudentService } from '../../users/services/student.service'
-import { GlobalSpinner } from '../../shared/components/spinner.component'
 import { useParams } from 'react-router-dom'
-import useCourseService from '../services/course.service'
 import { useInfiniteScroll } from '../../shared/utils/infinite-scroll'
 import { StudentsImportModalComponent } from '../components/students/students-import-modal.component'
 import { UploadFileButton } from '../components/upload-file-button'
-import { toast } from 'react-toastify'
+import { useGetStudentsWithoutGivenCourse } from '../../api/specialization/useGetStudentsWithoutGivenCourse'
+import { useAddStudentsToCourse } from '../../api/courses/useAddStudentsToCourse'
+import { useImportCourseStudents } from '../../api/courses/useImportCourseStudents'
 
 export const CourseTransferStudentsPage = () => {
     const [studentsAttending, setStudentsAttending] = useState<Student[]>([])
@@ -23,11 +22,10 @@ export const CourseTransferStudentsPage = () => {
     const [page, setPage] = useState(1)
     const [paginationDisabled, setPaginationDisabled] = useState(false)
     const [parsedStudents, setParsedStudents] = useState<Student[]>([])
-
     const setSpinner = useApplicationStore((state) => state.setSpinner)
-    const spinner = useApplicationStore((state) => state.spinner)
-    const { getStudentsWithoutGivenCourse } = useStudentService()
-    const { addStudentsToCourse, importCourseStudents } = useCourseService()
+    const { getStudentsWithoutGivenCourse } = useGetStudentsWithoutGivenCourse()
+    const { addStudentsToCourse } = useAddStudentsToCourse()
+    const { importCourseStudents } = useImportCourseStudents()
     const { title } = useParams()
     const { onScroll, setLoading } = useInfiniteScroll(async () => {
         if (paginationDisabled) {
@@ -220,7 +218,6 @@ export const CourseTransferStudentsPage = () => {
                     />
                 </Flex>
             </Flex>
-            <GlobalSpinner spinner={spinner} />
             <StudentsImportModalComponent
                 students={parsedStudents}
                 isOpen={isOpen}

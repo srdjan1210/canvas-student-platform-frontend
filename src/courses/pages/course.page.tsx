@@ -4,14 +4,19 @@ import { FileBoxOverview } from '../components/files/file-box-overview.component
 import { CourseFile } from '../model/course-file.model'
 import { useEffect, useState } from 'react'
 import { SideAnnouncements } from '../components/side-announcements.component'
-import { Announcement } from '../model/announcement.model'
 import { FileSearchBar } from '../components/files/file-search-bar.component'
 import { download } from '../../shared/utils/download'
 import { useApplicationStore } from '../../store/application.store'
 import { FileListOverview } from '../components/files/file-list-overview.component'
 import { ANNOUNCEMENTS_MOCK } from '../mock/mock'
 import { toast } from 'react-toastify'
-import useCourseService from '../services/course.service'
+import { Announcement } from '../../announcements/model/announcement.model'
+import { useDeleteFolder } from '../../api/courses/useDeleteFolder'
+import { useDeleteFile } from '../../api/courses/useDeleteFile'
+import { useUploadFile } from '../../api/courses/useUploadFile'
+import { useCreateFolder } from '../../api/courses/useCreateFolder'
+import { useGetDownloadUrl } from '../../api/courses/useGetDownloadUrl'
+import { useListFiles } from '../../api/courses/useListFiles'
 
 export const CoursePage = () => {
     const { name } = useParams()
@@ -22,14 +27,12 @@ export const CoursePage = () => {
     const setSpinner = useApplicationStore((state) => state.setSpinner)
     const spinner = useApplicationStore((state) => state.spinner)
     const [search, setSearch] = useState('')
-    const {
-        listFiles,
-        getDownloadUrl,
-        createFolder,
-        uploadFile,
-        deleteFolder,
-        deleteFile,
-    } = useCourseService()
+    const { listFiles } = useListFiles()
+    const { getDownloadUrl } = useGetDownloadUrl()
+    const { createFolder } = useCreateFolder()
+    const { uploadFile } = useUploadFile()
+    const { deleteFolder } = useDeleteFolder()
+    const { deleteFile } = useDeleteFile()
 
     const goBack = () => {
         setSpinner(true)
@@ -53,7 +56,6 @@ export const CoursePage = () => {
 
     const downloadFile = async (filename: string) => {
         const link = await getDownloadUrl(currentFolder, filename)
-        console.log(link)
         await download(link, filename)
     }
 
@@ -138,19 +140,6 @@ export const CoursePage = () => {
                     />
                 )}
             </Flex>
-            {/*<SideAnnouncements announcements={announcements} />*/}
-            {spinner && (
-                <Flex
-                    alignItems={'center'}
-                    justifyContent={'center'}
-                    position={'absolute'}
-                    w={'100%'}
-                    h={'100%'}
-                    background={'rgba(1, 1, 1, 0.5)'}
-                >
-                    <Spinner boxSize={40} color={'white'} />
-                </Flex>
-            )}
         </Flex>
     )
 }
