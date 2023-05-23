@@ -1,7 +1,19 @@
+import { toast } from 'react-toastify'
 import { StateCreator } from 'zustand'
-import { LoginDto } from './dtos/login.dto'
-import { AuthStoreActions } from './interfaces/auth-store-actions.type'
-import { AuthStoreState } from './interfaces/auth-store-state.type'
+import { axiosInstance } from '../../api/useAxios'
+import { User } from '../../auth/model/user.model'
+import { LoginCredentials } from './types/login-credentials.type'
+
+type AuthStoreActions = {
+    login: (data: LoginCredentials) => Promise<{ user?: User }>
+    logout: () => void
+    getMe: (token: string) => Promise<User | undefined>
+}
+
+type AuthStoreState = {
+    token: string | null
+    user: User | null
+}
 
 export type AuthStore = AuthStoreState & AuthStoreActions
 
@@ -12,20 +24,20 @@ const state: AuthStoreState = {
 
 export const authStoreSlice: StateCreator<AuthStore> = (set, get) => ({
     ...state,
-    login: async (dto: LoginDto) => {
-        const tokenData = await get().getToken(dto)
-        if (tokenData.error) return { data: null, error: tokenData.error }
-        const userData = await get().getMe(tokenData.data ?? '')
+    login: async (data: LoginCredentials) => {
+        try {
+            const resp = await axiosInstance.post('/auth/login', data)
+            set((state) => ({
+                token: resp.data.access_token,
+            }))
+            const user = await get().getMe(resp.data.access_token)
+            toast.success('Successfully logged in!')
 
-        console.log(tokenData.data, userData.data)
-        set((state) => ({
-            token: tokenData.data,
-            user: userData.data,
-        }))
-
-        return {
-            data: userData,
-            error: null,
+            return { user }
+        } catch (e: any) {
+            console.log(e)
+            toast.error(e.response.data.message)
+            return {}
         }
     },
     logout: () => {
@@ -34,56 +46,20 @@ export const authStoreSlice: StateCreator<AuthStore> = (set, get) => ({
             user: null,
         }))
     },
-    getToken: async ({ email, password }: LoginDto) => {
-        try {
-            const resp = await fetch(
-                `${process.env.REACT_APP_BACKEND_URL}/auth/login`,
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ email, password }),
-                }
-            )
-            const data = await resp.json()
-            if (resp.status != 200) {
-                return {
-                    data: null,
-                    error: data.message,
-                }
-            }
-            return {
-                data: data.access_token,
-                error: null,
-            }
-        } catch (e: any) {
-            return {
-                data: null,
-                error: e,
-            }
-        }
-    },
     getMe: async (token: string) => {
         try {
-            const resp = await fetch(
-                `${process.env.REACT_APP_BACKEND_URL}/auth/me`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            )
-            const data = await resp.json()
-            return {
-                data,
-                error: null,
-            }
+            const resp = await axiosInstance.get('/auth/me', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+
+            set((state) => ({
+                user: resp.data,
+            }))
+            return resp.data
         } catch (e: any) {
-            return {
-                data: null,
-                error: e,
-            }
+            console.log(e)
         }
     },
 })

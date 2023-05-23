@@ -1,4 +1,4 @@
-import { useAxios } from '../useAxios'
+import { useAxios } from '../../useAxios'
 import { toast } from 'react-toastify'
 
 export const useCreateFolder = () => {

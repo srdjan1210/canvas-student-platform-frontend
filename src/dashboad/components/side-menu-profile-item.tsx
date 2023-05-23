@@ -1,10 +1,9 @@
-import { Flex } from '@chakra-ui/react'
+import { Flex, Image } from '@chakra-ui/react'
+import { useApplicationStore } from '../../store/application.store'
 
-interface Props {
-    letter?: string
-}
+export const SideMenuProfileItem = () => {
+    const user = useApplicationStore((state) => state.user)
 
-export const SideMenuProfileItem = ({ letter }: Props) => {
     return (
         <Flex
             alignItems={'center'}
@@ -16,7 +15,7 @@ export const SideMenuProfileItem = ({ letter }: Props) => {
             color={'white'}
             fontSize={30}
         >
-            {letter}
+            {user?.avatar ? <Image src={user?.avatar} /> : user?.name.charAt(0)}
         </Flex>
     )
 }

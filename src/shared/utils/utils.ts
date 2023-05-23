@@ -13,3 +13,13 @@ export const addProxyDefaultValue = (object: any, defaultValue: any) => {
 
     return new Proxy(object, handler)
 }
+
+export const formatDatePretty = (date: Date) => {
+    date = new Date(date)
+    const year = date.getFullYear()
+    const month = date.toLocaleString('default', { month: 'short' })
+    const day = String(date.getDate()).padStart(2, '0')
+    const hours = String(date.getHours()).padStart(2, '0')
+    const minutes = String(date.getMinutes()).padStart(2, '0')
+    return `${day}-${month}-${year} ${hours}:${minutes}`
+}

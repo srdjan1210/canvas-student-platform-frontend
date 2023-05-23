@@ -1,15 +1,15 @@
 import { Button, Flex, Heading, Input, useDisclosure } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { useImportCourseStudents } from '../../api/courses/csv/useImportCourseStudents'
+import { useAddStudentsToCourse } from '../../api/courses/useAddStudentsToCourse'
+import { useGetStudentsWithoutGivenCourse } from '../../api/specialization/useGetStudentsWithoutGivenCourse'
+import { useInfiniteScroll } from '../../shared/utils/useInfiniteScroll'
+import { useApplicationStore } from '../../store/application.store'
 import { Student } from '../../users/model/student.model'
 import { StudentDndContainer } from '../components/students/student-dnd-container.component'
-import { useApplicationStore } from '../../store/application.store'
-import { useParams } from 'react-router-dom'
-import { useInfiniteScroll } from '../../shared/utils/infinite-scroll'
 import { StudentsImportModalComponent } from '../components/students/students-import-modal.component'
 import { UploadFileButton } from '../components/upload-file-button'
-import { useGetStudentsWithoutGivenCourse } from '../../api/specialization/useGetStudentsWithoutGivenCourse'
-import { useAddStudentsToCourse } from '../../api/courses/useAddStudentsToCourse'
-import { useImportCourseStudents } from '../../api/courses/useImportCourseStudents'
 
 export const CourseTransferStudentsPage = () => {
     const [studentsAttending, setStudentsAttending] = useState<Student[]>([])
@@ -19,7 +19,6 @@ export const CourseTransferStudentsPage = () => {
     const [leftDrag, setLeftDrag] = useState<Student | null>(null)
     const [rightDrag, setRightDrag] = useState<Student | null>(null)
     const [search, setSearch] = useState('')
-    const [page, setPage] = useState(1)
     const [paginationDisabled, setPaginationDisabled] = useState(false)
     const [parsedStudents, setParsedStudents] = useState<Student[]>([])
     const setSpinner = useApplicationStore((state) => state.setSpinner)
@@ -27,16 +26,14 @@ export const CourseTransferStudentsPage = () => {
     const { addStudentsToCourse } = useAddStudentsToCourse()
     const { importCourseStudents } = useImportCourseStudents()
     const { title } = useParams()
-    const { onScroll, setLoading } = useInfiniteScroll(async () => {
-        if (paginationDisabled) {
-            setLoading(false)
-            return
-        }
-        const loaded = await loadPaginated(search, page + 1)
-        setPage(page + 1)
-        setStudentsNotAttending([...studentsNotAttending, ...loaded])
-        setLoading(false)
-    })
+    const { onScroll, page, resetPages } = useInfiniteScroll(
+        async () => {
+            const loaded = await loadPaginated(search, page + 1)
+            setStudentsNotAttending([...studentsNotAttending, ...loaded])
+            return loaded.length != 0
+        },
+        { temporaryDisable: paginationDisabled }
+    )
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     const loadPaginated = async (text: string, page: number) => {
@@ -59,7 +56,7 @@ export const CourseTransferStudentsPage = () => {
     const handleKeyDown = (e: any) => {
         if (e.key === 'Enter') {
             loadStudents(search)
-            setPage(1)
+            resetPages()
             setPaginationDisabled(false)
         }
     }
@@ -123,7 +120,7 @@ export const CourseTransferStudentsPage = () => {
         setParsedStudents([])
         setStudentsNotAttending([])
         await loadStudents(search)
-        setPage(1)
+        resetPages()
     }
 
     useEffect(() => {

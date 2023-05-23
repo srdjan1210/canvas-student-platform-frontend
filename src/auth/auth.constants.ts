@@ -25,3 +25,8 @@ export const LOGIN_VALIDATION_SCHEMA = yup.object({
     email: yup.string().email(VALID_EMAIL_FORMAT).required(REQUIRED),
     password: yup.string().min(8).required(REQUIRED),
 })
+
+export const LOGIN_FORM_DEFAULT_VALUES = {
+    email: '',
+    password: '',
+}

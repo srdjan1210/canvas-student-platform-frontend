@@ -1,5 +1,5 @@
-import { useAxios } from '../useAxios'
-import { downloadAxios } from '../../shared/utils/download'
+import { useAxios } from '../../useAxios'
+import { downloadAxios } from '../../../shared/utils/download'
 import { toast } from 'react-toastify'
 
 export const useExportProfessorsToCsv = () => {

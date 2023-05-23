@@ -16,7 +16,7 @@ import { PaginationBar } from '../../shared/components/pagination-bar.component'
 import { Professor } from '../../users/model/professor.model'
 import ProfessorTableItemComponent from '../../users/components/professor-table-item.component'
 import { useGetCourseProfessors } from '../../api/courses/useGetCourseProfessors'
-import { useExportProfessorsToCsv } from '../../api/courses/useExportProfessorsToCsv'
+import { useExportProfessorsToCsv } from '../../api/courses/csv/useExportProfessorsToCsv'
 import { useRemoveProfessorFromCourse } from '../../api/courses/useRemoveProfessorFromCourse'
 
 export const CourseProfessorListingPage = () => {

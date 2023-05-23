@@ -1,14 +1,14 @@
 import { Flex, Input, Text, Tooltip } from '@chakra-ui/react'
-import { FileBoxSwitch } from './file-box-switch.component'
-import { ProfessorFileOptions } from './professor-file-options.component'
 import { useApplicationStore } from '../../../store/application.store'
 import { AdminCourseOptions } from '../admin/admin-course.options.component'
+import { FileBoxSwitch } from './file-box-switch.component'
+import { ProfessorFileOptions } from './professor-file-options.component'
 
 interface Props {
     path?: string
     onCreateFolder: (folder: string) => void
-    onDeleteFolder: () => void
     onUploadFile: (file: File | null) => void
+    onCreateAnnouncement: () => void
     course: string
     search: string
     onSearch: (text: string) => void
@@ -16,8 +16,8 @@ interface Props {
 export const FileSearchBar = ({
     path,
     onCreateFolder,
-    onDeleteFolder,
     onUploadFile,
+    onCreateAnnouncement,
     course,
     search,
     onSearch,
@@ -70,7 +70,7 @@ export const FileSearchBar = ({
                 <ProfessorFileOptions
                     onCreateFolder={onCreateFolder}
                     onUploadFile={onUploadFile}
-                    onDeleteFolder={onDeleteFolder}
+                    onCreateAnnouncement={onCreateAnnouncement}
                 />
             )}
             {user?.role === 'ADMINISTRATOR' && (

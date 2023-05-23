@@ -1,15 +1,15 @@
-import { useEffect, useState } from 'react'
-import { useApplicationStore } from '../../store/application.store'
-import { useParams } from 'react-router-dom'
-import { useInfiniteScroll } from '../../shared/utils/infinite-scroll'
 import { Button, Flex, Heading, Input, useDisclosure } from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { useImportCourseProfessors } from '../../api/courses/csv/useImportCourseProfessors'
+import { useAddProfessorToCourse } from '../../api/courses/useAddProfessorToCourse'
+import { useGetProfessorsWithGivenCourse } from '../../api/specialization/useGetProfessorsWithGivenCourse'
+import { useInfiniteScroll } from '../../shared/utils/useInfiniteScroll'
+import { useApplicationStore } from '../../store/application.store'
 import { Professor } from '../../users/model/professor.model'
 import { ProfessorDndContainer } from '../components/professors/professor-dnd-container.component'
-import { UploadFileButton } from '../components/upload-file-button'
 import { ProfessorsImportModalComponent } from '../components/professors/professors-import-modal.component'
-import { useGetProfessorsWithGivenCourse } from '../../api/specialization/useGetProfessorsWithGivenCourse'
-import { useAddProfessorToCourse } from '../../api/courses/useAddProfessorToCourse'
-import { useImportCourseProfessors } from '../../api/courses/useImportCourseProfessors'
+import { UploadFileButton } from '../components/upload-file-button'
 
 export const CourseTransferProfessorsPage = () => {
     const [professorsMembers, setProfessorsMembers] = useState<Professor[]>([])
@@ -19,7 +19,6 @@ export const CourseTransferProfessorsPage = () => {
     const [leftDrag, setLeftDrag] = useState<Professor | null>(null)
     const [rightDrag, setRightDrag] = useState<Professor | null>(null)
     const [search, setSearch] = useState('')
-    const [page, setPage] = useState(1)
     const [paginationDisabled, setPaginationDisabled] = useState(false)
     const [parsedProfessors, setParsedProfessors] = useState<Professor[]>([])
     const setSpinner = useApplicationStore((state) => state.setSpinner)
@@ -28,16 +27,16 @@ export const CourseTransferProfessorsPage = () => {
     const { importCourseProfessors } = useImportCourseProfessors()
     const { isOpen, onClose, onOpen } = useDisclosure()
     const { title } = useParams()
-    const { onScroll, setLoading } = useInfiniteScroll(async () => {
-        if (paginationDisabled) {
-            setLoading(false)
-            return
+    const { onScroll, page, resetPages } = useInfiniteScroll(
+        async () => {
+            const loaded = await loadPaginated(search, page + 1)
+            setProfessorsNotMembers([...professorsNotMembers, ...loaded])
+            return loaded.length != 0
+        },
+        {
+            isLoading: !paginationDisabled,
         }
-        const loaded = await loadPaginated(search, page + 1)
-        setPage(page + 1)
-        setProfessorsNotMembers([...professorsNotMembers, ...loaded])
-        setLoading(false)
-    })
+    )
 
     const loadPaginated = async (text: string, page: number) => {
         const professors = await getProfessorsWithGivenCourse(title, text, page)
@@ -60,7 +59,7 @@ export const CourseTransferProfessorsPage = () => {
     const handleKeyDown = async (e: any) => {
         if (e.key === 'Enter') {
             await loadProfessors(search)
-            setPage(1)
+            resetPages()
             setPaginationDisabled(false)
         }
     }
@@ -124,7 +123,7 @@ export const CourseTransferProfessorsPage = () => {
         setParsedProfessors([])
         setProfessorsMembers([])
         await loadProfessors(search)
-        setPage(1)
+        resetPages()
     }
 
     useEffect(() => {

@@ -1,17 +1,17 @@
-import {
-    addProxyDefaultValue,
-    extractFileExtension,
-} from '../../../shared/utils/utils'
+import { Button, Flex, Text } from '@chakra-ui/react'
+import React, { useState } from 'react'
 import {
     AiFillFolder,
     AiOutlineFile,
     AiOutlineFilePdf,
     AiOutlineFilePpt,
 } from 'react-icons/ai'
-import { Button, Flex, Text, Tooltip } from '@chakra-ui/react'
-import { IoMdArrowBack } from 'react-icons/io'
-import React, { useState } from 'react'
 import { BsFillTrashFill } from 'react-icons/bs'
+import { IoMdArrowBack } from 'react-icons/io'
+import {
+    addProxyDefaultValue,
+    extractFileExtension,
+} from '../../../shared/utils/utils'
 import { useApplicationStore } from '../../../store/application.store'
 
 interface Props {
@@ -19,9 +19,16 @@ interface Props {
     type: 'folder' | 'file' | 'back'
     onClick: () => void
     onDelete: () => void
+    onFolderDelete: () => void
 }
 
-export const FlatFileView = ({ filename, type, onClick, onDelete }: Props) => {
+export const FlatFileView = ({
+    filename,
+    type,
+    onClick,
+    onDelete,
+    onFolderDelete,
+}: Props) => {
     const [showOptions, setShowOptions] = useState(false)
     const authenticated = useApplicationStore((state) => state.user)
     const ICON_SIZE = 60
@@ -36,6 +43,17 @@ export const FlatFileView = ({ filename, type, onClick, onDelete }: Props) => {
 
     const handleClick = (event: React.MouseEvent) => {
         if (event.currentTarget === event.target) onClick()
+    }
+
+    const handleDelete = (type: string) => {
+        if (type === 'folder') {
+            onFolderDelete()
+            return
+        }
+
+        if (type === 'file') {
+            onDelete()
+        }
     }
 
     return (
@@ -70,14 +88,13 @@ export const FlatFileView = ({ filename, type, onClick, onDelete }: Props) => {
                 </Text>
             </Flex>
             {showOptions &&
-                type != 'folder' &&
                 type != 'back' &&
                 authenticated?.role !== 'STUDENT' && (
                     <Button
                         background={'red'}
                         color={'white'}
                         marginRight={10}
-                        onClick={() => onDelete()}
+                        onClick={() => handleDelete(type)}
                     >
                         <BsFillTrashFill size={20} />
                     </Button>

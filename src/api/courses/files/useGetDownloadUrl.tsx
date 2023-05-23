@@ -1,4 +1,4 @@
-import { useAxios } from '../useAxios'
+import { useAxios } from '../../useAxios'
 import fileDownload from 'js-file-download'
 
 export const useGetDownloadUrl = () => {

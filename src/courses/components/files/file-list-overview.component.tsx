@@ -1,12 +1,13 @@
-import { CourseFile } from '../../model/course-file.model'
 import { Flex } from '@chakra-ui/react'
+import React from 'react'
+import { CourseFile } from '../../model/course-file.model'
 import FlatFileView from './flat-file-view.component'
 import { NoFiles } from './no-files.component'
-import React from 'react'
 
 interface Props {
     files: CourseFile[]
     goToFolder: (folder: string) => void
+    onFolderDelete: (folder: string) => void
     downloadFile: (filename: string) => void
     deleteFile: (filename: string) => void
     goBack: () => void
@@ -18,6 +19,7 @@ export const FileListOverview = ({
     files,
     downloadFile,
     goToFolder,
+    onFolderDelete,
     goBack,
     isFolderRoot,
     deleteFile,
@@ -54,6 +56,7 @@ export const FileListOverview = ({
         >
             {!isFolderRoot && (
                 <FlatFileView
+                    onFolderDelete={() => {}}
                     filename={'Go Back'}
                     type={'back'}
                     onClick={() => goBack()}
@@ -71,6 +74,9 @@ export const FileListOverview = ({
                                 type={file.type}
                                 onClick={() => handleClick(file)}
                                 onDelete={() => deleteFile(file.filename)}
+                                onFolderDelete={() =>
+                                    onFolderDelete(file.filename)
+                                }
                             />
                         )}
                     </React.Fragment>

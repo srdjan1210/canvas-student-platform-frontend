@@ -1,8 +1,12 @@
 import { useState } from 'react'
 import { ResponseState } from './response-state'
 
-export const useResponseState = <T>(defaultState: ResponseState<T>) => {
-    const [state, setState] = useState<ResponseState<T>>(defaultState)
+export const useResponseState = <T>(defaultState: T) => {
+    const [state, setState] = useState<ResponseState<T>>({
+        data: defaultState,
+        error: null,
+        status: 'IDLE',
+    })
 
     const setLoading = () => {
         setState({

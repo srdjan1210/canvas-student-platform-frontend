@@ -1,9 +1,9 @@
 import axios, { AxiosResponse } from 'axios'
-import { useApplicationStore } from '../store/application.store'
-import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import { useApplicationStore } from '../store/application.store'
 
-const axiosInstance = axios.create({
+export const axiosInstance = axios.create({
     baseURL: process.env.REACT_APP_BACKEND_URL,
 })
 

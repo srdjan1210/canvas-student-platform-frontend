@@ -1,15 +1,15 @@
-import { useAxios } from '../useAxios'
+import { useAxios } from '../../useAxios'
 import { toast } from 'react-toastify'
 
-export const useImportCourseProfessors = () => {
+export const useImportCourseStudents = () => {
     const { axios } = useAxios()
-    const importCourseProfessors = async (course: string, file: File) => {
+    const importCourseStudents = async (course: string, file: File) => {
         try {
             console.log(file)
             const data = new FormData()
             data.append('file', file)
             const resp = await axios.post(
-                `/courses/${course}/professors/parse`,
+                `/courses/${course}/students/parse`,
                 data,
                 {
                     headers: {
@@ -18,7 +18,7 @@ export const useImportCourseProfessors = () => {
                 }
             )
             if (resp.data.length == 0) {
-                toast.error('No parsed professors available for this course!')
+                toast.error('No parsed students available for this course!')
             }
             return resp.data
         } catch (e: any) {
@@ -26,5 +26,7 @@ export const useImportCourseProfessors = () => {
             return []
         }
     }
-    return { importCourseProfessors }
+    return {
+        importCourseStudents,
+    }
 }

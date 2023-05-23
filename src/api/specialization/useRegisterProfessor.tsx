@@ -1,11 +1,11 @@
 import { useAxios } from '../useAxios'
-import { ProfessorRegistrationDto } from '../../store/auth-store/dtos/professor-registration.dto'
+import { ProfessorRegistration } from '../../store/auth-store/types/professor-registration.type'
 import { toast } from 'react-toastify'
 
 export const useRegisterProfessor = () => {
     const { axios } = useAxios()
 
-    const registerProfessor = async (professor: ProfessorRegistrationDto) => {
+    const registerProfessor = async (professor: ProfessorRegistration) => {
         try {
             await axios.post('/auth/register/professor', professor)
             toast.success('Successfully registered professor!')

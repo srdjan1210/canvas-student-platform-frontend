@@ -7,15 +7,15 @@ import {
     Input,
     Text,
 } from '@chakra-ui/react'
-import { useForm } from 'react-hook-form'
-import { useApplicationStore } from '../../store/application.store'
-import { SubmitButton } from '../components/submit-button.component'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { LOGIN_VALIDATION_SCHEMA } from '../auth.constants'
-import { useEffect } from 'react'
+import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
-import { Simulate } from 'react-dom/test-utils'
+import { useApplicationStore } from '../../store/application.store'
+import {
+    LOGIN_FORM_DEFAULT_VALUES,
+    LOGIN_VALIDATION_SCHEMA,
+} from '../auth.constants'
+import { SubmitButton } from '../components/submit-button.component'
 
 interface FormValues {
     email: string
@@ -27,35 +27,22 @@ export const LoginPage = () => {
     const signIn = useApplicationStore((state) => state.login)
     const token = useApplicationStore((state) => state.token)
 
-    useEffect(() => {
-        if (token !== null) {
-            console.log('token')
-            //navigate('/dashboard')
-        }
-    }, [token])
-
-    const defaultValues: FormValues = {
-        email: '',
-        password: '',
-    }
     const {
         handleSubmit,
         formState: { errors, isValid },
         register,
     } = useForm<FormValues>({
-        defaultValues,
+        defaultValues: LOGIN_FORM_DEFAULT_VALUES,
         resolver: yupResolver(LOGIN_VALIDATION_SCHEMA),
         mode: 'onChange',
     })
+
     const login = async ({ email, password }: FormValues) => {
-        const { error, data } = await signIn({ email, password })
-        if (!error) {
-            toast.success('Successfull login!')
-            console.log(data)
-            navigate(`/dashboard/${data.data.role.toLowerCase()}`)
+        const { user } = await signIn({ email, password })
+        if (user) {
+            navigate(`/dashboard/${user?.role.toLowerCase()}`)
             return
         }
-        toast.error('Invalid credentials')
     }
 
     const handleKeyDown = (e: React.KeyboardEvent) => {

@@ -1,16 +1,12 @@
 import { Box, Button, Flex } from '@chakra-ui/react'
-import { useForm } from 'react-hook-form'
-import FileUpload from './file-upload.component'
-import { useEffect, useState } from 'react'
-import { AiOutlineUpload } from 'react-icons/ai'
-import { BsFillTrashFill } from 'react-icons/bs'
+import { useState } from 'react'
 import { IoMdAdd } from 'react-icons/io'
 import { InputButton } from '../input-button.component'
 
 interface Props {
     onCreateFolder: (folder: string) => void
-    onDeleteFolder: () => void
     onUploadFile: (file: File | null) => void
+    onCreateAnnouncement: () => void
 }
 type FormValues = {
     file: File
@@ -18,22 +14,15 @@ type FormValues = {
 export const ProfessorFileOptions = ({
     onCreateFolder,
     onUploadFile,
-    onDeleteFolder,
+    onCreateAnnouncement,
 }: Props) => {
-    const [file, setFile] = useState<File | null>(null)
     const [folder, setFolder] = useState('')
-    const { register, watch } = useForm<FormValues>()
-    const files = watch('file')
 
-    useEffect(() => {
-        if (files) {
-            setFile(Object.values(files)[0])
-        }
-    }, [files])
-
-    const uploadFile = () => {
+    const handleFileUpload = (e: any) => {
+        if (e.target.files == null || e.target.files?.length == 0) return
+        const file = e.target.files[0]
         onUploadFile(file)
-        setFile(null)
+        e.target.value = null
     }
 
     const createFolder = () => {
@@ -50,52 +39,32 @@ export const ProfessorFileOptions = ({
             />
             <Box>
                 <Button
-                    leftIcon={<BsFillTrashFill size={20} />}
-                    background={'red'}
+                    leftIcon={<IoMdAdd size={25} />}
+                    background={'green'}
                     color={'white'}
-                    onClick={() => onDeleteFolder()}
+                    onClick={() => onCreateAnnouncement()}
                 >
-                    Delete folder
+                    Create Announcement
                 </Button>
             </Box>
-            {file && (
-                <>
-                    <Box>
-                        <Button
-                            leftIcon={<AiOutlineUpload size={25} />}
-                            onClick={uploadFile}
-                            background={'green'}
-                            color={'white'}
-                        >
-                            Upload file
-                        </Button>
-                    </Box>
-                    <Box>
-                        <Button
-                            leftIcon={<BsFillTrashFill size={20} />}
-                            background={'red'}
-                            color={'white'}
-                            onClick={() => setFile(null)}
-                        >
-                            Remove file
-                        </Button>
-                    </Box>
-                </>
-            )}
-            {!file && (
-                <Box>
-                    <FileUpload register={register('file')}>
-                        <Button
-                            leftIcon={<IoMdAdd size={25} />}
-                            background={'green'}
-                            color={'white'}
-                        >
-                            Add file
-                        </Button>
-                    </FileUpload>
-                </Box>
-            )}
-            {file?.name}
+            <Box>
+                <input
+                    id="file-upload"
+                    type={'file'}
+                    style={{ display: 'none' }}
+                    onChange={handleFileUpload}
+                />
+
+                <Button
+                    leftIcon={<IoMdAdd size={25} />}
+                    background={'green'}
+                    color={'white'}
+                >
+                    <label style={{ cursor: 'pointer' }} htmlFor="file-upload">
+                        Add file
+                    </label>
+                </Button>
+            </Box>
         </Flex>
     )
 }

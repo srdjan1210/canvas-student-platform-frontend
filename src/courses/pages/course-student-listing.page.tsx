@@ -16,7 +16,7 @@ import { Student } from '../../users/model/student.model'
 import { useApplicationStore } from '../../store/application.store'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useGetCourseStudents } from '../../api/courses/useGetCourseStudents'
-import { useExportStudentsToCsv } from '../../api/courses/useExportStudentsToCsv'
+import { useExportStudentsToCsv } from '../../api/courses/csv/useExportStudentsToCsv'
 import { useRemoveStudentFromCourse } from '../../api/courses/useRemoveStudentFromCourse'
 
 export const CourseStudentListingPage = () => {

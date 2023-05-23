@@ -1,25 +1,24 @@
-import { useParams } from 'react-router-dom'
-import { Flex, Spinner } from '@chakra-ui/react'
-import { FileBoxOverview } from '../components/files/file-box-overview.component'
-import { CourseFile } from '../model/course-file.model'
+import { Flex } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
-import { SideAnnouncements } from '../components/side-announcements.component'
-import { FileSearchBar } from '../components/files/file-search-bar.component'
-import { download } from '../../shared/utils/download'
-import { useApplicationStore } from '../../store/application.store'
-import { FileListOverview } from '../components/files/file-list-overview.component'
-import { ANNOUNCEMENTS_MOCK } from '../mock/mock'
+import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { Announcement } from '../../announcements/model/announcement.model'
-import { useDeleteFolder } from '../../api/courses/useDeleteFolder'
-import { useDeleteFile } from '../../api/courses/useDeleteFile'
-import { useUploadFile } from '../../api/courses/useUploadFile'
-import { useCreateFolder } from '../../api/courses/useCreateFolder'
-import { useGetDownloadUrl } from '../../api/courses/useGetDownloadUrl'
-import { useListFiles } from '../../api/courses/useListFiles'
+import { useCreateFolder } from '../../api/courses/files/useCreateFolder'
+import { useDeleteFile } from '../../api/courses/files/useDeleteFile'
+import { useDeleteFolder } from '../../api/courses/files/useDeleteFolder'
+import { useGetDownloadUrl } from '../../api/courses/files/useGetDownloadUrl'
+import { useListFiles } from '../../api/courses/files/useListFiles'
+import { useUploadFile } from '../../api/courses/files/useUploadFile'
+import { download } from '../../shared/utils/download'
+import { useApplicationStore } from '../../store/application.store'
+import { FileBoxOverview } from '../components/files/file-box-overview.component'
+import { FileListOverview } from '../components/files/file-list-overview.component'
+import { FileSearchBar } from '../components/files/file-search-bar.component'
+import { CourseFile } from '../model/course-file.model'
 
 export const CoursePage = () => {
     const { name } = useParams()
+    const navigate = useNavigate()
     const [files, setFiles] = useState<CourseFile[]>([])
     const [announcements, setAnnouncements] = useState<Announcement[]>([])
     const [currentFolder, setCurrentFolder] = useState<string>(name ?? '')
@@ -70,37 +69,35 @@ export const CoursePage = () => {
         setSpinner(false)
     }
 
-    const onDeleteFolder = async () => {
-        if (currentFolder === name) return
+    const onDeleteFolder = async (folderName: string) => {
         setSpinner(true)
-        await deleteFolder(currentFolder)
+        await deleteFolder(`${currentFolder}/${folderName}`)
         setSpinner(false)
-        goBack()
+        await listFolderFiles()
     }
 
     const uploadNewFile = async (file: File | null) => {
-        if (file != null) {
-            setSpinner(true)
-            await uploadFile(file, currentFolder)
-            await listFolderFiles()
-            setSpinner(false)
-        }
-    }
-
-    const handleDeleteFile = async (filename: string) => {
+        if (file == null) return
         setSpinner(true)
-        await deleteFile(`${currentFolder}/${filename}`)
+        await uploadFile(file, currentFolder)
         await listFolderFiles()
         setSpinner(false)
+    }
+
+    const handleDeleteFile = async (folder: string) => {
+        setSpinner(true)
+        await deleteFile(`${currentFolder}/${folder}`)
+        await listFolderFiles()
+        setSpinner(false)
+    }
+
+    const handleCreateAnnouncement = () => {
+        navigate(`/dashboard/courses/${name}/create/announcement`)
     }
 
     useEffect(() => {
         listFolderFiles()
     }, [currentFolder])
-
-    useEffect(() => {
-        setAnnouncements(ANNOUNCEMENTS_MOCK)
-    }, [])
 
     return (
         <Flex w={'100%'} position={'relative'}>
@@ -113,8 +110,8 @@ export const CoursePage = () => {
                 <FileSearchBar
                     path={currentFolder}
                     onCreateFolder={createNewFolder}
-                    onDeleteFolder={onDeleteFolder}
                     onUploadFile={uploadNewFile}
+                    onCreateAnnouncement={handleCreateAnnouncement}
                     course={name ?? ''}
                     search={search}
                     onSearch={(val) => setSearch(val)}
@@ -132,6 +129,7 @@ export const CoursePage = () => {
                     <FileListOverview
                         files={files}
                         goToFolder={(folder: string) => goToFolder(folder)}
+                        onFolderDelete={(folder) => onDeleteFolder(folder)}
                         downloadFile={(file) => downloadFile(file)}
                         goBack={() => goBack()}
                         isFolderRoot={currentFolder === name}
