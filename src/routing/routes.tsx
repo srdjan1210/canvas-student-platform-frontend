@@ -2,23 +2,16 @@ import { RouteObject } from 'react-router-dom'
 import App from '../App'
 import { LoginPage } from '../auth/pages/login.page'
 import { Dashboard } from '../dashboad/pages/dashboard.page'
-import StudentCoursesPage from '../courses/pages/student-courses.page'
-import { CoursePage } from '../courses/pages/course.page'
+import StudentCoursesPage from '../courses-dashboard/pages/student-courses.page'
 import StudentPage from '../shared/pages/student.page'
-import ProfessorCoursesPage from '../courses/pages/professor-courses.page'
+import ProfessorCoursesPage from '../courses-dashboard/pages/professor-courses.page'
 import ProfessorPage from '../shared/pages/professor.page'
 import { AuthWrapper } from '../auth/components/auth.wrapper'
 import { StudentDashboardPage } from '../users/pages/student-dashboard.page'
 import React from 'react'
-import { CourseTransferStudentsPage } from '../courses/pages/course-transfer-students.page'
-import { CourseTransferProfessorsPage } from '../courses/pages/course-transfer-professors.page'
-import { CourseCoordinatorPage } from '../courses/pages/course-coordinator.page'
-import { AdminCoursesPage } from '../courses/pages/admin-courses.page'
+import { AdminCoursesPage } from '../courses-dashboard/pages/admin-courses.page'
 import { AdminPage } from '../shared/pages/admin.page'
-import CourseStudentListingPage from '../courses/pages/course-student-listing.page'
-import { CourseProfessorListingPage } from '../courses/pages/course-professor-listing.page'
 import { ProfessorDashboardPage } from '../users/pages/professor-dashboard.page'
-import { AnnouncementPage } from '../announcements/pages/announcement.page'
 import { CreateAnnouncementPage } from '../announcements/pages/create-announcement.page'
 import { CourseTestsPage } from '../courses-dashboard/pages/tests/course-tests.page'
 import { CourseTestSubmissionsPage } from '../courses-dashboard/pages/tests/course-test-submissions.page'
@@ -28,6 +21,8 @@ import { CourseAnnouncementsPage } from '../courses-dashboard/pages/announcement
 import { CourseStudentsPage } from '../courses-dashboard/pages/students/course-students.page'
 import { CourseProfessorsPage } from '../courses-dashboard/pages/professors/course-professors.page'
 import { MyCourseScoresPage } from '../courses-dashboard/pages/tests/my-course-scores.page'
+import { CourseProfessorTransferPage } from '../courses-dashboard/pages/professors/course-professor-transfer.page'
+import { CourseStudentTransferPage } from '../courses-dashboard/pages/students/course-student-transfer.page'
 
 export const routes: RouteObject[] = [
     {
@@ -49,7 +44,15 @@ export const routes: RouteObject[] = [
                 ),
                 children: [
                     {
-                        path: 'course-dashboard/courses/:title',
+                        path: 'announcements',
+                        element: (
+                            <AuthWrapper roles={['ADMINISTRATOR', 'PROFESSOR']}>
+                                <CreateAnnouncementPage />
+                            </AuthWrapper>
+                        ),
+                    },
+                    {
+                        path: 'courses/:title',
                         element: (
                             <AuthWrapper
                                 roles={[
@@ -83,6 +86,22 @@ export const routes: RouteObject[] = [
                                 element: (
                                     <AuthWrapper roles={['ADMINISTRATOR']}>
                                         <CourseProfessorsPage />
+                                    </AuthWrapper>
+                                ),
+                            },
+                            {
+                                path: 'professors/transfer',
+                                element: (
+                                    <AuthWrapper roles={['ADMINISTRATOR']}>
+                                        <CourseProfessorTransferPage />
+                                    </AuthWrapper>
+                                ),
+                            },
+                            {
+                                path: 'students/transfer',
+                                element: (
+                                    <AuthWrapper roles={['ADMINISTRATOR']}>
+                                        <CourseStudentTransferPage />
                                     </AuthWrapper>
                                 ),
                             },
@@ -167,84 +186,6 @@ export const routes: RouteObject[] = [
                             {
                                 path: '',
                                 element: <AdminCoursesPage />,
-                            },
-                        ],
-                    },
-                    {
-                        path: 'courses',
-                        element: <CourseCoordinatorPage />,
-                        children: [
-                            {
-                                path: ':name',
-                                element: <CoursePage />,
-                            },
-                            {
-                                path: ':title/add/students',
-                                element: (
-                                    <AuthWrapper roles={['ADMINISTRATOR']}>
-                                        <CourseTransferStudentsPage />
-                                    </AuthWrapper>
-                                ),
-                            },
-                            {
-                                path: ':title/add/professors',
-                                element: (
-                                    <AuthWrapper roles={['ADMINISTRATOR']}>
-                                        <CourseTransferProfessorsPage />
-                                    </AuthWrapper>
-                                ),
-                            },
-                            {
-                                path: ':title/list/students',
-                                element: (
-                                    <AuthWrapper roles={['ADMINISTRATOR']}>
-                                        <CourseStudentListingPage />
-                                    </AuthWrapper>
-                                ),
-                            },
-                            {
-                                path: ':title/list/professors',
-                                element: (
-                                    <AuthWrapper roles={['ADMINISTRATOR']}>
-                                        <CourseProfessorListingPage />
-                                    </AuthWrapper>
-                                ),
-                            },
-                            {
-                                path: ':title/announcements/:announcementId',
-                                element: (
-                                    <AuthWrapper
-                                        roles={[
-                                            'ADMINISTRATOR',
-                                            'PROFESSOR',
-                                            'STUDENT',
-                                        ]}
-                                    >
-                                        <AnnouncementPage />
-                                    </AuthWrapper>
-                                ),
-                            },
-                            {
-                                path: ':course/create/announcement',
-                                element: (
-                                    <AuthWrapper
-                                        roles={[
-                                            'ADMINISTRATOR',
-                                            'PROFESSOR',
-                                            'STUDENT',
-                                        ]}
-                                    >
-                                        <CreateAnnouncementPage />
-                                    </AuthWrapper>
-                                ),
-                            },
-                            {
-                                path: ':title/tests/:testId',
-                                element: (
-                                    <AuthWrapper roles={['PROFESSOR']}>
-                                        <CourseTestSubmissionsPage />
-                                    </AuthWrapper>
-                                ),
                             },
                         ],
                     },

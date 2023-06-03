@@ -6,10 +6,11 @@ import {
     MdOutlinePlayLesson,
 } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom'
-import { CreateCourseForm } from '../../courses/components/create-course-form.component'
+import { CreateCourseForm } from '../../courses-dashboard/components/create-course-form.component'
 import { useApplicationStore } from '../../store/application.store'
 import { SideMenuItem } from './side-menu-item.component'
 import { SideMenuProfileItem } from './side-menu-profile-item'
+import { TfiAnnouncement } from 'react-icons/tfi'
 
 export const SideMenu = () => {
     const navigate = useNavigate()
@@ -111,6 +112,19 @@ export const SideMenu = () => {
                             size={40}
                             cursor="pointer"
                             onClick={() => openCreateCourseForm()}
+                        />
+                    }
+                />
+            )}
+            {['ADMINISTRATOR', 'PROFESSOR'].includes(user?.role ?? '') && (
+                <SideMenuItem
+                    tooltip={'Create Announcement'}
+                    link={'/dashboard/announcements'}
+                    icon={
+                        <TfiAnnouncement
+                            color="white"
+                            size={40}
+                            cursor="pointer"
                         />
                     }
                 />

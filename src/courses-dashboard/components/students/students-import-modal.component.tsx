@@ -7,7 +7,9 @@ import {
     ModalCloseButton,
     ModalContent,
     ModalFooter,
+    ModalHeader,
     ModalOverlay,
+    Text,
 } from '@chakra-ui/react'
 
 interface Props {
@@ -27,16 +29,25 @@ export const StudentsImportModalComponent = ({
             <ModalOverlay />
             <ModalContent w={'80%'} h={'80%'}>
                 <ModalCloseButton />
+                <ModalHeader>Parsed Students</ModalHeader>
                 <ModalBody overflowY={'scroll'}>
-                    {students.map((student) => (
-                        <Flex
-                            key={student.id}
-                            justifyContent={'center'}
-                            alignItems={'center'}
-                        >
-                            {`${student.name} ${student.surname} ${student.fullIndex}`}
-                        </Flex>
-                    ))}
+                    <Flex direction={'column'} w={'100%'} h={'100%'}>
+                        {students.map((student) => (
+                            <Flex
+                                key={student.id}
+                                alignItems={'center'}
+                                justifyContent={'flex-start'}
+                                borderBottom={'1px solid lightgray'}
+                                paddingLeft={'5px'}
+                                h={'100px'}
+                            >
+                                <Text fontSize={'20px'}>
+                                    {`${student.name} ${student.surname}(${student.fullIndex}`}
+                                    )
+                                </Text>
+                            </Flex>
+                        ))}
+                    </Flex>
                 </ModalBody>
                 <ModalFooter>
                     <Button

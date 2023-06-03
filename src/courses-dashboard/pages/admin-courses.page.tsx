@@ -3,8 +3,8 @@ import { Course } from '../model/course.model'
 import { useNavigate } from 'react-router-dom'
 import { NoCourses } from '../components/no-courses.component'
 import { Flex } from '@chakra-ui/react'
-import CourseCard from '../components/course-card.component'
 import { useGetAllCourses } from '../../api/courses/useGetAllCourses'
+import CourseCard from '../components/course-card.component'
 
 export const AdminCoursesPage = () => {
     const [courses, setCourses] = useState<Course[]>([])

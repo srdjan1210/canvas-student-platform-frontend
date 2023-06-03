@@ -8,9 +8,11 @@ export const useRegisterProfessor = () => {
     const registerProfessor = async (professor: ProfessorRegistration) => {
         try {
             await axios.post('/auth/register/professor', professor)
-            toast.success('Successfully registered professor!')
+            toast.success('Successfully registered professor!', {
+                position: 'bottom-right',
+            })
         } catch (e: any) {
-            toast.error('Registration failed!')
+            toast.error('Registration failed!', { position: 'bottom-right' })
             return null
         }
     }

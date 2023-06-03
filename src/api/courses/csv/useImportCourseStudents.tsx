@@ -18,7 +18,9 @@ export const useImportCourseStudents = () => {
                 }
             )
             if (resp.data.length == 0) {
-                toast.error('No parsed students available for this course!')
+                toast.error('No parsed students available for this course!', {
+                    position: 'bottom-right',
+                })
             }
             return resp.data
         } catch (e: any) {

@@ -11,7 +11,7 @@ export const ScrollableTable = ({
 }: PropsWithChildren & Props & TableProps) => (
     <Flex
         overflowY={'scroll'}
-        maxH={'400px'}
+        maxH={'600px'}
         css={{ ...SCROLL_HOVER_DEFAULT }}
         p={'5px'}
         {...flexProps}

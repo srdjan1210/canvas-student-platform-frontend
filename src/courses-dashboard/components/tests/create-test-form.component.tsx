@@ -16,9 +16,9 @@ import { useForm } from 'react-hook-form'
 import {
     CREATE_TEST_DEFAULT_VALUES,
     CREATE_TEST_VALIDATION_SCHEMA,
-} from '../scores.constants'
+} from './scores.constants'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useCreateTest } from '../../api/courses/tests/useCreateTest'
+import { useCreateTest } from '../../../api/courses/tests/useCreateTest'
 import { useState } from 'react'
 
 export type FormValues = {

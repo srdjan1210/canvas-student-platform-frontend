@@ -31,12 +31,14 @@ export const authStoreSlice: StateCreator<AuthStore> = (set, get) => ({
                 token: resp.data.access_token,
             }))
             const user = await get().getMe(resp.data.access_token)
-            toast.success('Successfully logged in!')
+            toast.success('Successfully logged in!', {
+                position: 'bottom-right',
+            })
 
             return { user }
         } catch (e: any) {
             console.log(e)
-            toast.error(e.response.data.message)
+            toast.error(e.response.data.message, { position: 'bottom-right' })
             return {}
         }
     },

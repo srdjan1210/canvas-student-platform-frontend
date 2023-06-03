@@ -15,11 +15,13 @@ export const useDeleteTest = () => {
             setLoading()
             await axios.delete(`/scores/tests/${testId}`)
             setSuccess()
-            toast.success('Succesfully deleted test')
+            toast.success('Succesfully deleted test', {
+                position: 'bottom-right',
+            })
         } catch (e: any) {
             console.log(e)
             setError(e.response.data.message)
-            toast.error(e.response.data.message)
+            toast.error(e.response.data.message, { position: 'bottom-right' })
         }
     }
 

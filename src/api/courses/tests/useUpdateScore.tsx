@@ -23,10 +23,12 @@ export const useUpdateScore = () => {
                     score,
                 }
             )
-            toast.success('Successfully updated points!')
+            toast.success('Successfully updated points!', {
+                position: 'bottom-right',
+            })
         } catch (e: any) {
             console.log(e)
-            toast.error(e.response.data.message)
+            toast.error(e.response.data.message, { position: 'bottom-right' })
         }
     }
 

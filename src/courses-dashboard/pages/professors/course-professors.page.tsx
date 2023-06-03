@@ -14,6 +14,7 @@ import { ProfessorTableItem } from '../../components/professors/professor-table-
 import { useRemoveProfessorFromCourse } from '../../../api/courses/useRemoveProfessorFromCourse'
 import { ScrollableTable } from '../../components/shared/scrollable-table'
 import { FlexTableWrapper } from '../../components/shared/flex-table-wrapper.component'
+import { NavigationButton } from '../../components/shared/navigation-button.component'
 
 export const CourseProfessorsPage = () => {
     const { title = '' } = useParams()
@@ -23,8 +24,8 @@ export const CourseProfessorsPage = () => {
     const { removeProfessorFromCourse } = useRemoveProfessorFromCourse()
     const [professors, setProfessors] = useState<Professor[]>([])
     const navigate = useNavigate()
-    const handleAddProfessor = () => {
-        navigate(`/dashboard/courses/${title}/professors/add`)
+    const handleTransferProfessors = () => {
+        navigate(`/dashboard/courses/${title}/professors/transfer`)
     }
 
     const handleExportToCsv = async () => {
@@ -52,9 +53,9 @@ export const CourseProfessorsPage = () => {
                 justifyContent={'flex-end'}
                 gap={5}
             >
-                <AddButton onClick={handleAddProfessor}>
-                    Add Professor
-                </AddButton>
+                <NavigationButton onClick={handleTransferProfessors}>
+                    Transfer
+                </NavigationButton>
                 <AddButton onClick={handleExportToCsv}>Export to Csv</AddButton>
             </Flex>
             <ScrollableTable>

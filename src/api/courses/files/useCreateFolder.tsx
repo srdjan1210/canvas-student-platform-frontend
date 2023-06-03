@@ -8,11 +8,13 @@ export const useCreateFolder = () => {
         try {
             const encoded = encodeURIComponent(folder)
             const files = await axios.post(`/courses/folder/${encoded}`, {})
-            toast.success('Successfully created folder')
+            toast.success('Successfully created folder', {
+                position: 'bottom-right',
+            })
             return files.data
         } catch (e: any) {
             console.log(e)
-            toast.error(e.response.data.message)
+            toast.error(e.response.data.message, { position: 'bottom-right' })
             return null
         }
     }

@@ -15,7 +15,7 @@ import React, {
     useState,
 } from 'react'
 import { useDeleteFile } from '../../../api/courses/files/useDeleteFile'
-import { InputButton } from '../../../courses/components/input-button.component'
+import { InputButton } from '../shared/input-button.component'
 import { useCreateFolder } from '../../../api/courses/files/useCreateFolder'
 import { useDeleteFolder } from '../../../api/courses/files/useDeleteFolder'
 import { IoMdAdd } from 'react-icons/io'

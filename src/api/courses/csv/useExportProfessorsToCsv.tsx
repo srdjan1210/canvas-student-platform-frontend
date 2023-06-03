@@ -15,7 +15,9 @@ export const useExportProfessorsToCsv = () => {
             downloadAxios(response)
         } catch (e: any) {
             console.log(e)
-            toast.error('Something wrong with exporting students')
+            toast.error('Something wrong with exporting students', {
+                position: 'bottom-right',
+            })
         }
     }
     return {

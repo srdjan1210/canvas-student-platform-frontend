@@ -1,7 +1,7 @@
 import { Box, Flex, Image, Text } from '@chakra-ui/react'
 import { Announcement } from '../model/announcement.model'
 import { formatDatePretty } from '../../shared/utils/utils'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 export interface Props {
     announcement: Announcement
@@ -9,7 +9,7 @@ export interface Props {
 export const AlertAnnouncementItem = ({ announcement }: Props) => {
     const navigate = useNavigate()
     const handleClick = () => {
-        navigate(`/dashboard/announcements/${announcement.id}`)
+        navigate(`/dashboard/courses/${announcement.courseTitle}/announcements`)
     }
     return (
         <Flex

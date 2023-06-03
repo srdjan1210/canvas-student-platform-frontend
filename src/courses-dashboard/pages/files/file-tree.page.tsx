@@ -8,7 +8,7 @@ import { useGetFileTree } from '../../../api/courses/files/useGetFileTree'
 import { FileMenuContextWrapper } from '../../components/files/file-menu-context.component'
 import { useDroppableContainer } from '../../hooks/useDroppableContainer'
 import { useUploadFile } from '../../../api/courses/files/useUploadFile'
-import { InputButton } from '../../../courses/components/input-button.component'
+import { InputButton } from '../../components/shared/input-button.component'
 
 export const FileTreePage = () => {
     const { title } = useParams()

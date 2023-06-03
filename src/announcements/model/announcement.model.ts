@@ -7,4 +7,5 @@ export type Announcement = {
     createdAt: Date
     avatar?: string
     courseId?: number
+    courseTitle: string
 }

@@ -21,6 +21,7 @@ import { useExportStudentsToCsv } from '../../../api/courses/csv/useExportStuden
 import { SCROLL_HOVER_DEFAULT } from '../../../shared/utils/utils'
 import { FlexTableWrapper } from '../../components/shared/flex-table-wrapper.component'
 import { ScrollableTable } from '../../components/shared/scrollable-table'
+import { NavigationButton } from '../../components/shared/navigation-button.component'
 
 export const CourseStudentsPage = () => {
     const { title = '' } = useParams()
@@ -41,8 +42,8 @@ export const CourseStudentsPage = () => {
         setStudents(students)
     }
 
-    const handleAddStudent = () => {
-        navigate(`/dashboard/courses/${title}/add/students`)
+    const handleTransfer = () => {
+        navigate(`/dashboard/courses/${title}/students/transfer`)
     }
     const handleExportToCsv = async () => {
         await exportStudentsToCsv(title)
@@ -59,7 +60,9 @@ export const CourseStudentsPage = () => {
                 justifyContent={'flex-end'}
                 gap={5}
             >
-                <AddButton onClick={handleAddStudent}>Add Student</AddButton>
+                <NavigationButton onClick={handleTransfer}>
+                    Transfer
+                </NavigationButton>
                 <AddButton onClick={handleExportToCsv}>Export to Csv</AddButton>
             </Flex>
             <ScrollableTable>

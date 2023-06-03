@@ -6,7 +6,9 @@ import {
     ModalCloseButton,
     ModalContent,
     ModalFooter,
+    ModalHeader,
     ModalOverlay,
+    Text,
 } from '@chakra-ui/react'
 import { Professor } from '../../../users/model/professor.model'
 
@@ -27,16 +29,25 @@ export const ProfessorsImportModalComponent = ({
             <ModalOverlay />
             <ModalContent w={'80%'} h={'80%'}>
                 <ModalCloseButton />
+                <ModalHeader>Parsed professors</ModalHeader>
                 <ModalBody overflowY={'scroll'}>
-                    {professors.map((professor) => (
-                        <Flex
-                            key={professor.id}
-                            alignItems={'center'}
-                            justifyContent={'center'}
-                        >
-                            {`${professor.name} ${professor.surname} ${professor.title}`}
-                        </Flex>
-                    ))}
+                    <Flex direction={'column'} w={'100%'} h={'100%'}>
+                        {professors.map((professor) => (
+                            <Flex
+                                key={professor.id}
+                                alignItems={'center'}
+                                justifyContent={'flex-start'}
+                                borderBottom={'1px solid lightgray'}
+                                paddingLeft={'5px'}
+                                h={'100px'}
+                            >
+                                <Text fontSize={'20px'}>
+                                    {`${professor.name} ${professor.surname}(${professor.title}`}
+                                    )
+                                </Text>
+                            </Flex>
+                        ))}
+                    </Flex>
                 </ModalBody>
                 <ModalFooter>
                     <Button

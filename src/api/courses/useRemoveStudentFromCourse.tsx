@@ -9,10 +9,12 @@ export const useRemoveStudentFromCourse = () => {
     ) => {
         try {
             await axios.delete(`/courses/${course}/students/${studentId}`)
-            toast.success('Successfully removed from course!')
+            toast.success('Successfully removed from course!', {
+                position: 'bottom-right',
+            })
         } catch (e: any) {
             console.log(e)
-            toast.error(e.response.message)
+            toast.error(e.response.message, { position: 'bottom-right' })
         }
     }
     return {

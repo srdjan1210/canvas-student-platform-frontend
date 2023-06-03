@@ -10,7 +10,7 @@ export const useDeleteFolder = () => {
             await axios.delete(`courses/folder/${encoded}`)
         } catch (e: any) {
             console.log(e)
-            toast.error(e.response.data.message)
+            toast.error(e.response.data.message, { position: 'bottom-right' })
             return null
         }
     }
