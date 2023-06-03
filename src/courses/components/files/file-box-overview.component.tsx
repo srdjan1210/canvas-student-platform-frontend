@@ -34,7 +34,9 @@ export const FileBoxOverview = ({
             flexWrap={'wrap'}
             gap={20}
             overflowY={'scroll'}
+            p={'10px'}
             h={'100%'}
+            minH={'90%'}
             css={{
                 '&::-webkit-scrollbar': {
                     width: '4px',

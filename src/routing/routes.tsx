@@ -20,6 +20,14 @@ import { CourseProfessorListingPage } from '../courses/pages/course-professor-li
 import { ProfessorDashboardPage } from '../users/pages/professor-dashboard.page'
 import { AnnouncementPage } from '../announcements/pages/announcement.page'
 import { CreateAnnouncementPage } from '../announcements/pages/create-announcement.page'
+import { CourseTestsPage } from '../courses-dashboard/pages/tests/course-tests.page'
+import { CourseTestSubmissionsPage } from '../courses-dashboard/pages/tests/course-test-submissions.page'
+import { CourseDashboardPage } from '../courses-dashboard/pages/course-dashboard.page'
+import { FileTreePage } from '../courses-dashboard/pages/files/file-tree.page'
+import { CourseAnnouncementsPage } from '../courses-dashboard/pages/announcements/course-announcements.page'
+import { CourseStudentsPage } from '../courses-dashboard/pages/students/course-students.page'
+import { CourseProfessorsPage } from '../courses-dashboard/pages/professors/course-professors.page'
+import { MyCourseScoresPage } from '../courses-dashboard/pages/tests/my-course-scores.page'
 
 export const routes: RouteObject[] = [
     {
@@ -40,6 +48,70 @@ export const routes: RouteObject[] = [
                     </AuthWrapper>
                 ),
                 children: [
+                    {
+                        path: 'course-dashboard/courses/:title',
+                        element: (
+                            <AuthWrapper
+                                roles={[
+                                    'ADMINISTRATOR',
+                                    'PROFESSOR',
+                                    'STUDENT',
+                                ]}
+                            >
+                                <CourseDashboardPage />
+                            </AuthWrapper>
+                        ),
+                        children: [
+                            {
+                                path: 'files',
+                                element: <FileTreePage />,
+                            },
+                            {
+                                path: 'announcements',
+                                element: <CourseAnnouncementsPage />,
+                            },
+                            {
+                                path: 'students',
+                                element: (
+                                    <AuthWrapper roles={['ADMINISTRATOR']}>
+                                        <CourseStudentsPage />
+                                    </AuthWrapper>
+                                ),
+                            },
+                            {
+                                path: 'professors',
+                                element: (
+                                    <AuthWrapper roles={['ADMINISTRATOR']}>
+                                        <CourseProfessorsPage />
+                                    </AuthWrapper>
+                                ),
+                            },
+                            {
+                                path: 'tests',
+                                element: (
+                                    <AuthWrapper roles={['PROFESSOR']}>
+                                        <CourseTestsPage />
+                                    </AuthWrapper>
+                                ),
+                            },
+                            {
+                                path: 'tests/:testId/submissions',
+                                element: (
+                                    <AuthWrapper roles={['PROFESSOR']}>
+                                        <CourseTestSubmissionsPage />
+                                    </AuthWrapper>
+                                ),
+                            },
+                            {
+                                path: 'my-scores',
+                                element: (
+                                    <AuthWrapper roles={['STUDENT']}>
+                                        <MyCourseScoresPage />
+                                    </AuthWrapper>
+                                ),
+                            },
+                        ],
+                    },
                     {
                         path: 'students',
                         element: (
@@ -163,6 +235,14 @@ export const routes: RouteObject[] = [
                                         ]}
                                     >
                                         <CreateAnnouncementPage />
+                                    </AuthWrapper>
+                                ),
+                            },
+                            {
+                                path: ':title/tests/:testId',
+                                element: (
+                                    <AuthWrapper roles={['PROFESSOR']}>
+                                        <CourseTestSubmissionsPage />
                                     </AuthWrapper>
                                 ),
                             },

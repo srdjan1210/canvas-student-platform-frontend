@@ -33,10 +33,9 @@ export const FileSearchBar = ({
                 user?.role === 'PROFESSOR' ? 'space-between' : 'center'
             }
             alignItems={'center'}
-            gap={10}
-            h={100}
             minH={100}
             position={'relative'}
+            flexWrap={'wrap'}
         >
             <Tooltip label={path}>
                 <Text
@@ -59,7 +58,7 @@ export const FileSearchBar = ({
             <Flex gap={10} alignItems={'center'}>
                 <Input
                     placeholder={'Search files'}
-                    w={500}
+                    w={250}
                     size={'lg'}
                     value={search}
                     onChange={handleSearch}

@@ -23,3 +23,19 @@ export const formatDatePretty = (date: Date) => {
     const minutes = String(date.getMinutes()).padStart(2, '0')
     return `${day}-${month}-${year} ${hours}:${minutes}`
 }
+
+export const SCROLL_HOVER_DEFAULT = {
+    '&::-webkit-scrollbar': {
+        width: '8px',
+    },
+    '&::-webkit-scrollbar-track': {
+        width: '8px',
+    },
+    '&::-webkit-scrollbar-thumb': {
+        background: 'lightgray',
+        borderRadius: '24px',
+    },
+    '&:hover::-webkit-scrollbar': {
+        width: '8px',
+    },
+}

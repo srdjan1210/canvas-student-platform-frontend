@@ -6,7 +6,7 @@ import { Header } from '../../shared/components/header'
 
 export const Dashboard = () => {
     return (
-        <Flex w={'100%'} h={'100%'}>
+        <Flex w={'100vw'} h={'100vh'}>
             <SideMenu />
             <Flex direction={'column'} w={'100%'} h={'100%'}>
                 <Header />

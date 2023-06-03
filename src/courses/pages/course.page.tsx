@@ -100,12 +100,14 @@ export const CoursePage = () => {
     }, [currentFolder])
 
     return (
-        <Flex w={'100%'} position={'relative'}>
+        <Flex w={'100%'} position={'relative'} maxH={'100%'}>
             <Flex
                 flex={5}
                 direction={'column'}
                 padding={10}
                 justifyContent={'flex-start'}
+                maxH={'90%'}
+                minH={'90%'}
             >
                 <FileSearchBar
                     path={currentFolder}

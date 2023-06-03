@@ -1,9 +1,10 @@
 import { Flex, Text } from '@chakra-ui/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { IoMdNotificationsOutline } from 'react-icons/io'
 import { AlertAnnouncementView } from '../../announcements/components/alert-announcement-view.component'
 import { Announcement } from '../../announcements/model/announcement.model'
 import { useGetPersonalAnnouncements } from '../../api/courses/announcements/useGetStudentAnnouncements'
+import { useSocketConnection } from '../../api/sockets/useSocketConnection'
 import { useApplicationStore } from '../../store/application.store'
 import { useInfiniteScroll } from '../utils/useInfiniteScroll'
 
@@ -13,6 +14,18 @@ export const Header = () => {
     const [showAnnouncements, setShowAnnouncements] = useState(false)
     const { getPersonalAnnouncements, announcementsState } =
         useGetPersonalAnnouncements()
+    const { observable } = useSocketConnection()
+
+    useEffect(() => {
+        const notId = observable.bind('notification', (ann: Announcement) => {
+            console.log(announcements)
+        })
+
+        return () => {
+            console.log('unbinding')
+            observable.unbind(notId)
+        }
+    }, [])
 
     const { onScroll, page } = useInfiniteScroll(
         async () => {

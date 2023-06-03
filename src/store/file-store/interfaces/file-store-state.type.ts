@@ -3,4 +3,5 @@ import { FileBoxType } from '../../../courses/components/files/file-box-switch.c
 export type FileStoreState = {
     boxType: FileBoxType
     spinner: boolean
+    fileMenuPosition: { x: number; y: number } | null
 }

@@ -37,7 +37,7 @@ export const FileListOverview = ({
         <Flex
             direction={'column'}
             overflowY={'scroll'}
-            h={'100%'}
+            flex={1}
             css={{
                 '&::-webkit-scrollbar': {
                     width: '4px',
