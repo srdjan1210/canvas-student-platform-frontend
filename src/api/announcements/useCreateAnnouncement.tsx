@@ -15,13 +15,16 @@ export const useCreateAnnouncement = () => {
                 body,
                 title,
             })
-            toast.success('Successfully created announcement!')
+            toast.success('Successfully created announcement!', {
+                position: 'bottom-right',
+            })
             return true
         } catch (e: any) {
             console.log(e)
             toast.error(
                 e.response.message ??
-                    'Something wrong with creating announcement!'
+                    'Something wrong with creating announcement!',
+                { position: 'bottom-right' }
             )
             return false
         }

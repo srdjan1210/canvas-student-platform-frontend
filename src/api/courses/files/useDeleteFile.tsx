@@ -9,7 +9,7 @@ export const useDeleteFile = () => {
             await axios.delete(`courses/file/${encoded}`)
         } catch (e: any) {
             console.log(e)
-            toast.error(e.response.data.message)
+            toast.error(e.response.data.message, { position: 'bottom-right' })
             return null
         }
     }

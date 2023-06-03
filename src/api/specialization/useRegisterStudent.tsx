@@ -7,10 +7,12 @@ export const useRegisterStudent = () => {
     const registerStudent = async (data: StudentRegistration) => {
         try {
             await axios.post('/auth/register/student', data)
-            toast.success('Successfully registered student!')
+            toast.success('Successfully registered student!', {
+                position: 'bottom-right',
+            })
         } catch (e: any) {
             console.log(e)
-            toast.error(e.response.message)
+            toast.error(e.response.message, { position: 'bottom-right' })
         }
     }
     return {

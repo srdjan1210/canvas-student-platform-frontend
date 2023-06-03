@@ -6,4 +6,6 @@ export type Announcement = {
     body: string
     createdAt: Date
     avatar?: string
+    courseId?: number
+    courseTitle: string
 }

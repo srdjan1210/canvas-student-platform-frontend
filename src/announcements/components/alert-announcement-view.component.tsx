@@ -25,10 +25,10 @@ export const AlertAnnouncementView = ({
             direction={'column'}
             border={'1px solid lightgray'}
             overflow={'hidden'}
-            {...props}
             zIndex={100000000}
             padding={2}
             background={'white'}
+            {...props}
         >
             <Flex
                 direction={'column'}
